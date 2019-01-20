@@ -1,4 +1,4 @@
-package com.kenvix.rconmanager;
+package com.kenvix.rconmanager.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,23 +9,26 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.utils.UITools;
+import com.kenvix.rconmanager.utils.ViewAutoLoad;
+
 public class MainActivity extends AppCompatActivity {
+    @ViewAutoLoad
+    private FloatingActionButton fab;
+    @ViewAutoLoad
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        UITools.initializeViewFields(this);
+
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
     }
 
     @Override
