@@ -1,36 +1,52 @@
 package com.kenvix.rconmanager.utils;
 
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.util.Log;
-
 import com.kenvix.rconmanager.R;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 public class UITools {
 
-    public static <T extends AppCompatActivity> void initializeViewFields(T target) {
-        for(Field field: target.getClass().getDeclaredFields()) {
+    //TODO: Cache reflect query result.
+    public static void initializeViewFields(@NonNull Object target) {
+        Class<?> targetClass =  target.getClass();
+
+        for(Field field: targetClass.getDeclaredFields()) {
             if(field != null) {
                 if(field.isAnnotationPresent(ViewAutoLoad.class)) {
                     try {
                         Field RField;
+
                         try {
-                            RField = R.id.class.getField(convertName(field.getName()));
+                            RField = R.id.class.getField(StringTools.convertUppercaseLetterToUnderlinedLowercaseLetter(field.getName()));
                         } catch (NoSuchFieldException ex) {
                             RField = R.id.class.getDeclaredField(field.getName());
                         }
+
                         Class<?> RFieldType = RField.getClass();
+
                         if(field.getClass().isAssignableFrom(RFieldType)) {
                             int RViewId = RField.getInt(R.id.class);
-                            Object RView = target.findViewById(RViewId);
-                            field.setAccessible(true);
-                            field.set(target, RView);
+
+                            try {
+                                Object RView = targetClass.getMethod("findViewById", int.class).invoke(target, RViewId);
+
+                                field.setAccessible(true);
+                                field.set(target, RView);
+                            } catch (NoSuchMethodException ex) {
+                                throw new IllegalArgumentException("Invalid input object: " + targetClass.getName() + " . There no method findViewById()");
+                            } catch (InvocationTargetException ex) {
+                                throw new IllegalArgumentException("Invalid input object: " + targetClass.getName() + " . method findViewById() is not callable");
+                            }
+
                         } else {
-                            throw new IllegalArgumentException("are u kidding me?");
+                            throw new IllegalArgumentException("Invalid field. stupid");
                         }
+
                     } catch (NoSuchFieldException ex) {
-                        Log.w("UI Field Initializer", "Invalid ViewAutoLoad Field: (Field Not Found) " + ex.getMessage());
+                        Log.w("UI Field Initializer", String.format("No such UI Field [%s] or [%s] : %s", StringTools.convertUppercaseLetterToUnderlinedLowercaseLetter(field.getName()), field.getName(), ex.getMessage()));
                     } catch (IllegalAccessException ex) {
                         Log.w("UI Field Initializer", "Invalid ViewAutoLoad Field: (Access Denied) " + ex.getMessage());
                     }
@@ -39,16 +55,4 @@ public class UITools {
         }
     }
 
-    private static String convertName(String name) {
-        char[] chars = name.toCharArray();
-        StringBuilder stringBuilder= new StringBuilder();
-        for (char c: chars){
-            if(c >= 'A' && c <='Z') {
-                stringBuilder.append("_").append(c + 32);
-            } else {
-                stringBuilder.append(c);
-            }
-        }
-        return stringBuilder.toString();
-    }
 }

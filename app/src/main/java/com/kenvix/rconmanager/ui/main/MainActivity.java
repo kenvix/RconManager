@@ -1,33 +1,38 @@
-package com.kenvix.rconmanager.ui;
+// Rcon Manager for Android
+// Copyright (c) 2019. Kenvix <i@kenvix.com>
+//
+// Licensed under GNU Affero General Public License v3.0
+
+package com.kenvix.rconmanager.ui.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.utils.UITools;
 import com.kenvix.rconmanager.utils.ViewAutoLoad;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     @ViewAutoLoad
-    private FloatingActionButton fab;
+    private FloatingActionButton mainFab;
+
     @ViewAutoLoad
-    private Toolbar toolbar;
+    private Toolbar mainToolbar;
+
+    @ViewAutoLoad
+    private RecyclerView mainServers;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        UITools.initializeViewFields(this);
+    protected void initializeElements() {
+        setSupportActionBar(mainToolbar);
 
-        setSupportActionBar(toolbar);
-
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        mainFab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
     }
 
@@ -51,5 +56,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.activity_main;
     }
 }
