@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="@dimen/item_server_height">
+
+    <LinearLayout
+        android:layout_width="@dimen/item_server_text_layout_width"
+        android:gravity="center"
+        android:layout_height="@dimen/item_server_height">
+
+        <ImageView
+            android:id="@+id/server_icon"
+            android:layout_width="@dimen/item_server_icon"
+            android:contentDescription="@string/server_name_default_text"
+            android:src="@drawable/ic_server"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/item_server_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/item_server_text_layout_padding_top"
+        android:paddingStart="@dimen/item_server_text_layout_padding_horizontal"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/item_server_text_layout_padding_horizontal"
+        android:layout_height="@dimen/item_server_height">
+
+        <TextView
+            android:id="@+id/server_name"
+            android:layout_width="match_parent"
+            android:text="@string/server_name_default_text"
+            android:textStyle="bold"
+            android:layout_height="@dimen/item_server_text_name_height" />
+
+        <TextView
+            android:id="@+id/server_address"
+            android:layout_width="match_parent"
+            android:text="@string/server_address_default_text"
+            android:layout_height="@dimen/item_server_height" />
+    </LinearLayout>
+</LinearLayout>

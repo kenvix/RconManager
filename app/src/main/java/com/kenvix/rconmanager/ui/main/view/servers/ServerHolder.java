@@ -10,19 +10,27 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.rcon.server.RconServer;
+import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.base.view.base.BaseHolder;
 import com.kenvix.rconmanager.utils.ViewAutoLoad;
 
-public class ServerHolder extends BaseHolder {
-    @ViewAutoLoad
+public class ServerHolder extends BaseHolder<RconServer> {
     private ImageView imageView;
-
-    @ViewAutoLoad
-    private TextView textView;
+    private TextView serverNameView;
+    private TextView serverAddressView;
 
     public ServerHolder(@NonNull View itemView) {
         super(itemView);
+        imageView = IconManager.getInstance().getIcon(R.drawable.ic_server);
+        serverNameView = itemView.findViewById(R.id.server_name);
+        serverAddressView = itemView.findViewById(R.id.server_address);
     }
 
-
+    @Override
+    public void bindView(RconServer server) {
+        serverNameView.setText(server.getName());
+        serverAddressView.setText(server.getHostAndPort());
+    }
 }

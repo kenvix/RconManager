@@ -5,7 +5,13 @@
 
 package com.kenvix.rconmanager.utils;
 
+import java.util.Locale;
+
 public class StringTools {
+    public static String format(String format, Object... args) {
+        return String.format(Locale.getDefault(), format, args);
+    }
+
     /**
      * Convert Uppercase Letter To Underlined Lowercase Letter
      * @param name string to convert

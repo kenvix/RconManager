@@ -1,3 +1,12 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="item_server_icon">35dp</dimen>
+    <dimen name="item_server_height">60dp</dimen>
+    <dimen name="item_server_text_layout_width">60dp</dimen>
+    <dimen name="item_server_text_layout_padding_horizontal">10dp</dimen>
+    <dimen name="item_server_text_layout_padding_top">6dp</dimen>
+    <dimen name="item_server_text_name_height">23dp</dimen>
 </resources>
