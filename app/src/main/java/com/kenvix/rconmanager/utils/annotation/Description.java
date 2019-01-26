@@ -1,4 +1,4 @@
-package com.kenvix.rconmanager.utils;
+package com.kenvix.rconmanager.utils.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

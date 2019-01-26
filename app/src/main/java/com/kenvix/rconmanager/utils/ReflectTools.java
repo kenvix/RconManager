@@ -1,5 +1,7 @@
 package com.kenvix.rconmanager.utils;
 
+import com.kenvix.rconmanager.utils.annotation.Description;
+
 import java.lang.reflect.Method;
 import java.util.NoSuchElementException;
 

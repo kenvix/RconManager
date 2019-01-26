@@ -6,9 +6,7 @@
 package com.kenvix.rconmanager.ui.main;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,23 +19,16 @@ import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
-import com.kenvix.rconmanager.utils.UITools;
-import com.kenvix.rconmanager.utils.ViewAutoLoad;
+import com.kenvix.rconmanager.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class MainActivity extends BaseActivity {
-    @ViewAutoLoad
-    private FloatingActionButton mainFab;
-
-    @ViewAutoLoad
-    private Toolbar mainToolbar;
-
-    @ViewAutoLoad
-    private RecyclerView mainServers;
-
+    @ViewAutoLoad private FloatingActionButton mainFab;
+    @ViewAutoLoad private Toolbar mainToolbar;
+    @ViewAutoLoad private RecyclerView mainServers;
     private ServerAdapter serverAdapter;
 
     private void initializeApplication() {

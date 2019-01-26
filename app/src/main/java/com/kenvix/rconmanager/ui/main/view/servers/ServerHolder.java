@@ -14,7 +14,6 @@ import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.base.view.base.BaseHolder;
-import com.kenvix.rconmanager.utils.ViewAutoLoad;
 
 public class ServerHolder extends BaseHolder<RconServer> {
     private ImageView imageView;

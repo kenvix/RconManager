@@ -9,14 +9,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.base.view.base.BaseAdapter;
-import com.kenvix.rconmanager.utils.ViewAutoLoad;
 
 import java.util.List;
 
