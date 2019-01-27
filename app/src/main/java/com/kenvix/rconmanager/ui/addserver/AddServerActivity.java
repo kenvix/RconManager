@@ -7,8 +7,8 @@ import android.widget.EditText;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
-import com.kenvix.rconmanager.utils.annotation.FormNotEmpty;
-import com.kenvix.rconmanager.utils.annotation.ViewAutoLoad;
+import com.kenvix.utils.annotation.form.FormNotEmpty;
+import com.kenvix.utils.annotation.ViewAutoLoad;
 
 public class AddServerActivity extends BaseActivity {
     @ViewAutoLoad @FormNotEmpty private EditText addServerName;

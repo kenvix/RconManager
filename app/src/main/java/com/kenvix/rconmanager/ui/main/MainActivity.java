@@ -19,7 +19,7 @@ import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
-import com.kenvix.rconmanager.utils.annotation.ViewAutoLoad;
+import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
 import java.util.List;

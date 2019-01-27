@@ -7,12 +7,7 @@ package com.kenvix.rconmanager.rcon.server;
 
 import android.support.annotation.NonNull;
 
-import com.kenvix.rconmanager.utils.StringTools;
-
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Locale;
 
 public abstract class RconServer {
     @NonNull

@@ -3,7 +3,8 @@ package com.kenvix.rconmanager.utils;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.kenvix.rconmanager.R;
-import com.kenvix.rconmanager.utils.annotation.ViewAutoLoad;
+import com.kenvix.utils.StringTools;
+import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

@@ -3,7 +3,7 @@
 //
 // Licensed under GNU Affero General Public License v3.0
 
-package com.kenvix.rconmanager.utils;
+package com.kenvix.utils;
 
 import java.util.Locale;
 

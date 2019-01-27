@@ -1,6 +1,6 @@
-package com.kenvix.rconmanager.utils;
+package com.kenvix.utils;
 
-import com.kenvix.rconmanager.utils.annotation.Description;
+import com.kenvix.utils.annotation.Description;
 
 import java.lang.reflect.Method;
 import java.util.NoSuchElementException;
@@ -13,7 +13,7 @@ public class ReflectTools {
     }
 
     public static String getMethodDescription(String className, String methodName) throws ClassNotFoundException, NoSuchMethodException {
-        Method targetMethod = UITools.class.getClassLoader().loadClass(className).getMethod(methodName);
+        Method targetMethod = ReflectTools.class.getClassLoader().loadClass(className).getMethod(methodName);
         return getMethodDescription(targetMethod);
     }
 

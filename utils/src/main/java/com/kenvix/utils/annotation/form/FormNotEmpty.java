@@ -1,4 +1,4 @@
-package com.kenvix.rconmanager.utils.annotation;
+package com.kenvix.utils.annotation.form;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
