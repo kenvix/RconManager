@@ -11,13 +11,15 @@ import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 public class AddServerActivity extends BaseActivity {
-    @ViewAutoLoad @FormNotEmpty private EditText addServerName;
-    @ViewAutoLoad @FormNotEmpty private EditText addServerHost;
-    @ViewAutoLoad @FormNotEmpty private EditText addServerPort;
-    @ViewAutoLoad               private EditText addServerPassword;
-    @ViewAutoLoad               private Button   addServerSubmit;
-    @ViewAutoLoad               private Button   addServerTest;
-    @ViewAutoLoad               private Toolbar  addServerToolbar;
+    private final String FormTag = "addServerActivity";
+
+    @ViewAutoLoad @FormNotEmpty(FormTag) private EditText addServerName;
+    @ViewAutoLoad @FormNotEmpty(FormTag) private EditText addServerHost;
+    @ViewAutoLoad @FormNotEmpty(FormTag) private EditText addServerPort;
+    @ViewAutoLoad                        private EditText addServerPassword;
+    @ViewAutoLoad                        private Button   addServerSubmit;
+    @ViewAutoLoad                        private Button   addServerTest;
+    @ViewAutoLoad                        private Toolbar  addServerToolbar;
 
     @Override
     protected void initializeElements() {
@@ -29,14 +31,19 @@ public class AddServerActivity extends BaseActivity {
         addServerTest.setOnClickListener(this::onServerFormTest);
     }
 
+    public void test(String promptText) {
+        //EditText fuck = findViewById()
+        //if(target.addServerName.getText().toString().isEmpty())
+        //    target.addServerName.setError("fuck you");
+    }
+
     @Override
     protected int getLayout() {
         return R.layout.activity_add_server;
     }
 
     private void checkForm(View view) {
-        if(addServerName.getText().toString().isEmpty())
-            addServerName.setError("fuck you");
+
     }
 
     private void onServerFormTest(View view) {
