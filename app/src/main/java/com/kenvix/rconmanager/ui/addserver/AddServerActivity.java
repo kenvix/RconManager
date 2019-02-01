@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
+import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
@@ -43,7 +44,7 @@ public class AddServerActivity extends BaseActivity {
     }
 
     private void checkForm(View view) {
-
+        Invoker.invokeFormChecker(FormTag, this);
     }
 
     private void onServerFormTest(View view) {
