@@ -14,6 +14,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -43,6 +44,10 @@ public abstract class BasePreprocessor extends AbstractProcessor {
     }
 
     protected final List<MethodSpec.Builder> getMethodBuilder(String methodName) {
+        return getMethodBuilder(methodName, null);
+    }
+
+    protected final List<MethodSpec.Builder> getMethodBuilder(String methodName, Element clazz) {
         Map<String, List<MethodSpec.Builder>> methodBuffer = getMethodBuffer();
 
         if(methodBuffer.containsKey(methodName))
@@ -52,7 +57,12 @@ public abstract class BasePreprocessor extends AbstractProcessor {
             if(methodBuffer.containsKey(methodName))
                 return methodBuffer.get(methodName);
 
-            List<MethodSpec.Builder> methodSpec = createMethodBuilder(methodName);
+            final List<MethodSpec.Builder> methodSpec;
+
+            if(clazz == null)
+                methodSpec = createMethodBuilder(methodName);
+            else
+                methodSpec = createMethodBuilder(methodName, clazz);
 
             if(methodSpec == null)
                 throw new IllegalArgumentException("Generate method code failed: create method for tag [" + methodName + "] is not implemented");
@@ -63,6 +73,7 @@ public abstract class BasePreprocessor extends AbstractProcessor {
     }
 
     protected List<MethodSpec.Builder> createMethodBuilder(String methodName) { return null; }
+    protected List<MethodSpec.Builder> createMethodBuilder(String methodName, Element clazz) { return null; }
 
     @Override
     public synchronized final void init(ProcessingEnvironment processingEnv) {

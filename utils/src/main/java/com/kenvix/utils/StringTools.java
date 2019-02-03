@@ -12,6 +12,14 @@ public class StringTools {
         return String.format(Locale.getDefault(), format, args);
     }
 
+    public static String makeFirstLetterUppercase(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
+    public static String makeFirstLetterLowercase(String name) {
+        return name.substring(0, 1).toLowerCase() + name.substring(1);
+    }
+
     /**
      * Convert Uppercase Letter To Underlined Lowercase Letter
      * @param name string to convert
@@ -26,6 +34,27 @@ public class StringTools {
             } else {
                 stringBuilder.append(c);
             }
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String convertPackageNameToUppercaseLetter(String name) {
+        char[] chars = name.toCharArray();
+        StringBuilder stringBuilder= new StringBuilder();
+        for (int i = 0; i < chars.length; i++){
+            if(chars[i] == '.') {
+                if(i < chars.length-1) {
+                    if(chars[i+1] <= 'z' && chars[i+1] >= 'a') {
+                        stringBuilder.append((char) (chars[i+1] - (char) 32));
+                    } else {
+                        stringBuilder.append((char) (chars[i+1]));
+                    }
+                    i++;
+                    continue;
+                }
+            }
+
+            stringBuilder.append(chars[i]);
         }
         return stringBuilder.toString();
     }

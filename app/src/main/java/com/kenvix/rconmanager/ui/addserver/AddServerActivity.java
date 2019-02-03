@@ -12,15 +12,15 @@ import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 public class AddServerActivity extends BaseActivity {
-    private final String FormTag = "addServerActivity";
+    private final String tag = "AddServerActivity";
 
-    @ViewAutoLoad @FormNotEmpty(FormTag) private EditText addServerName;
-    @ViewAutoLoad @FormNotEmpty(FormTag) private EditText addServerHost;
-    @ViewAutoLoad @FormNotEmpty(FormTag) private EditText addServerPort;
-    @ViewAutoLoad                        private EditText addServerPassword;
-    @ViewAutoLoad                        private Button   addServerSubmit;
-    @ViewAutoLoad                        private Button   addServerTest;
-    @ViewAutoLoad                        private Toolbar  addServerToolbar;
+    @ViewAutoLoad @FormNotEmpty(tag) public EditText addServerName;
+    @ViewAutoLoad @FormNotEmpty(tag) public EditText addServerHost;
+    @ViewAutoLoad @FormNotEmpty(tag) public EditText addServerPort;
+    @ViewAutoLoad                    public EditText addServerPassword;
+    @ViewAutoLoad                    public Button   addServerSubmit;
+    @ViewAutoLoad                    public Button   addServerTest;
+    @ViewAutoLoad                    public Toolbar  addServerToolbar;
 
     @Override
     protected void initializeElements() {
@@ -44,7 +44,7 @@ public class AddServerActivity extends BaseActivity {
     }
 
     private void checkForm(View view) {
-        Invoker.invokeFormChecker(FormTag, this);
+        Invoker.invokeFormChecker(tag, this);
     }
 
     private void onServerFormTest(View view) {

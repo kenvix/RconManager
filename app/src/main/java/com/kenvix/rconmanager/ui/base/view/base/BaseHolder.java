@@ -9,13 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.kenvix.rconmanager.utils.UITools;
+import com.kenvix.rconmanager.utils.Invoker;
 
 public abstract class BaseHolder<T> extends RecyclerView.ViewHolder {
 
     public BaseHolder(@NonNull View itemView) {
         super(itemView);
-        UITools.initializeViewFields(this);
+        Invoker.invokeViewAutoLoader(itemView);
     }
 
     public abstract void bindView(T data);

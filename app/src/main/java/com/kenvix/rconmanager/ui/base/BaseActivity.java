@@ -8,7 +8,7 @@ package com.kenvix.rconmanager.ui.base;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.kenvix.rconmanager.utils.UITools;
+import com.kenvix.rconmanager.utils.Invoker;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -16,7 +16,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        UITools.initializeViewFields(this);
+        Invoker.invokeViewAutoLoader(this);
 
         initializeElements();
     }

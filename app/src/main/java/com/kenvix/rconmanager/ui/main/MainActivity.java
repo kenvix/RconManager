@@ -26,9 +26,12 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class MainActivity extends BaseActivity {
-    @ViewAutoLoad private FloatingActionButton mainFab;
-    @ViewAutoLoad private Toolbar mainToolbar;
-    @ViewAutoLoad private RecyclerView mainServers;
+    private final String tag = "mainActivity";
+
+    @ViewAutoLoad public FloatingActionButton mainFab;
+    @ViewAutoLoad public Toolbar mainToolbar;
+    @ViewAutoLoad public RecyclerView mainServers;
+
     private ServerAdapter serverAdapter;
 
     private void initializeApplication() {

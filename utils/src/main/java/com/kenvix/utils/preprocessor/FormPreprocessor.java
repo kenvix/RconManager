@@ -1,6 +1,7 @@
 package com.kenvix.utils.preprocessor;
 
 import com.kenvix.utils.Environment;
+import com.kenvix.utils.PreprocessorName;
 import com.kenvix.utils.StringTools;
 import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.squareup.javapoet.ClassName;
@@ -50,7 +51,7 @@ public class FormPreprocessor extends BasePreprocessor {
                     .addMethods(methods)
                     .build();
 
-            JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage, formChecker)
+            JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", formChecker)
                     .addFileComment(getFileHeader())
                     .build();
 
@@ -66,11 +67,10 @@ public class FormPreprocessor extends BasePreprocessor {
     private void processFormNotEmpty(Element annotatedElement) {
         if(annotatedElement.getKind() == ElementKind.FIELD) {
             TypeMirror fieldType = annotatedElement.asType();
-            DeclaredType declared = (DeclaredType) fieldType;
 
             FormNotEmpty annotation = annotatedElement.getAnnotation(FormNotEmpty.class);
-
-            List<MethodSpec.Builder> builders = getMethodBuilder(annotation.value());
+            
+            List<MethodSpec.Builder> builders = getMethodBuilder(PreprocessorName.getFormCheckerMethodName(annotation.value()));
             String RMemberName = StringTools.convertUppercaseLetterToUnderlinedLowercaseLetter(annotatedElement.getSimpleName().toString());
             Name fieldVarName = annotatedElement.getSimpleName();
             ClassName RId =  ClassName.get(Environment.TargetAppPackage, "R", "id");
