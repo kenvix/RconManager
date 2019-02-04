@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.database.dao.BaseModel;
 import com.kenvix.rconmanager.rcon.server.GeneralRconServer;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;

@@ -22,4 +22,8 @@ public class ReflectTools {
         StackTraceElement element = stackTraceElement[stackTraceElement.length-1];
         return getMethodDescription(element.getClassName(), element.getMethodName());
     }
+
+    public static StackTraceElement getInvoker() {
+        return new Throwable().getStackTrace()[1];
+    }
 }

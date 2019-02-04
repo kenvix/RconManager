@@ -26,13 +26,22 @@ public class StringTools {
      * @return result
      */
     public static String convertUppercaseLetterToUnderlinedLowercaseLetter(String name) {
+        if(name.isEmpty())
+            return name;
+
         char[] chars = name.toCharArray();
-        StringBuilder stringBuilder= new StringBuilder();
-        for (char c: chars){
-            if(c >= 'A' && c <='Z') {
-                stringBuilder.append("_").append((char) (c + (char) 32));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if(chars[0] >= 'A' && chars[0] <= 'Z')
+            stringBuilder.append((char) (chars[0] + (char) 32));
+        else
+            stringBuilder.append(chars[0]);
+
+        for (int i = 1; i < chars.length; i++){
+            if(chars[i] >= 'A' && chars[i] <='Z') {
+                stringBuilder.append("_").append((char) (chars[i] + (char) 32));
             } else {
-                stringBuilder.append(c);
+                stringBuilder.append(chars[i]);
             }
         }
         return stringBuilder.toString();

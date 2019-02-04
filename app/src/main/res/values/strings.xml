@@ -8,13 +8,14 @@
     <string name="server_name_default_text">Server</string>
     <string name="server_address_default_text">Host:Port</string>
     <!-- Strings related to Add Server -->
-    <string name="title_activity_add_server">添加 Rcon 服务器</string>
+    <string name="title_activity_add_server">添加或修改 Rcon 服务器</string>
+    <string name="text_add_server_edit_mode">编辑模式 / 正在编辑服务器：</string>
     <string name="prompt_name">服务器名称 (任意命名)</string>
     <string name="prompt_host">服务器地址</string>
     <string name="prompt_port">Rcon 端口</string>
     <string name="prompt_password">Rcon 密码 (可选)</string>
     <string name="prompt_invalid_port">端口号不合法 (应介于 1~65535)</string>
-    <string name="action_add_server">添加服务器</string>
+    <string name="action_add_server">保存服务器</string>
     <string name="action_test_server">测试连接</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>

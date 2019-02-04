@@ -4,6 +4,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
@@ -21,6 +23,8 @@ public class AddServerActivity extends BaseActivity {
     @ViewAutoLoad                    public Button   addServerSubmit;
     @ViewAutoLoad                    public Button   addServerTest;
     @ViewAutoLoad                    public Toolbar  addServerToolbar;
+    @ViewAutoLoad                    public LinearLayout addServerEditMode;
+    @ViewAutoLoad                    public TextView addServerEditModeTargetId;
 
     @Override
     protected void initializeElements() {
