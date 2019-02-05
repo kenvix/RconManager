@@ -34,4 +34,8 @@
     <string name="error_invalid_sid">"Invalid server SID: "</string>
     <string name="success_edit">Successfully edited %s</string>
     <string name="success_add">Successfully added %s</string>
+    <string name="name_duplicated">" - Duplicated"</string>
+    <string name="success_duplicated">Duplicated %s</string>
+    <string name="text_share_server">Rcon Server Information\nName: %s\nHost: %s\nPort number: %d\nPassword: %s</string>
+    <string name="prompt_share_server">Share server information (Notice: Including Rcon server password)</string>
 </resources>

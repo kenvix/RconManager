@@ -39,4 +39,8 @@
     <string name="error_invalid_sid">无效服务器 SID:</string>
     <string name="success_edit">编辑 %s 成功</string>
     <string name="success_add">添加 %s 成功</string>
+    <string name="name_duplicated">" - 副本"</string>
+    <string name="success_duplicated">成功制作 %s 的副本</string>
+    <string name="text_share_server">Rcon 服务器信息\n名称：%s\n地址：%s\n端口号：%d\n密码：%s</string>
+    <string name="prompt_share_server">分享服务器信息 （注意：Rcon 服务器密码也会被分享）</string>
 </resources>

@@ -64,8 +64,8 @@ public abstract class RconServer implements Cloneable, Serializable {
     public abstract void runCommand(String command) throws IOException;
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-       return super.clone();
+    public RconServer clone() throws CloneNotSupportedException {
+       return (RconServer) super.clone();
     }
 
     public void setHost(@NonNull String host) {

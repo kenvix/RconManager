@@ -71,7 +71,16 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         });
 
         menu.findItem(R.id.action_server_item_duplicate).setOnMenuItemClickListener(view -> {
+            try {
+                RconServer newInstance = rconServer.clone();
+                newInstance.setName(newInstance.getName() + activity.getString(R.string.name_duplicated));
+                serverModel.add(newInstance);
 
+                activity.snackbar(activity.getString(R.string.success_duplicated, rconServer.getName()));
+                activity.reloadServerRecyclerView();
+            } catch (Exception ex) {
+                activity.exceptionSnackbarPrompt(ex);
+            }
             return true;
         });
 
@@ -83,16 +92,15 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         });
 
         menu.findItem(R.id.action_server_item_share).setOnMenuItemClickListener(view -> {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.prompt_share_server));
+            shareIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.text_share_server, rconServer.getName(), rconServer.getHost(), rconServer.getPort(), rconServer.getPassword()));
 
+            Intent shareIntentChooser = Intent.createChooser(shareIntent, activity.getString(R.string.prompt_share_server));
+            activity.startActivity(shareIntentChooser);
             return true;
         });
-    }
-
-    public void onMenuRefresh(MenuItem item) {
-
-    }
-
-    public void onMenuSettings(MenuItem item) {
-
     }
 }
