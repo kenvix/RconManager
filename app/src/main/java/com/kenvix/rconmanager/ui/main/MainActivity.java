@@ -29,6 +29,8 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     public static final int StartAddServerActivityRequestCode = 0xac00;
+    public static final String ExtraPromptText = "prompt_text";
+    public static final String ExtraRequestReload = "request_reload";
 
     @ViewAutoLoad public FloatingActionButton mainFab;
     @ViewAutoLoad public Toolbar mainToolbar;
@@ -66,6 +68,9 @@ public class MainActivity extends BaseActivity {
                     reloadServerRecyclerView();
             }
 
+            String promptText = data.getStringExtra(ExtraPromptText);
+            if(!promptText.isEmpty())
+                snackbar(promptText);
         }
     }
 
@@ -84,7 +89,10 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.main_action_settings) {
+            return true;
+        } else if(id == R.id.main_action_refresh) {
+            reloadServerRecyclerView();
             return true;
         }
 

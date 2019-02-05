@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
+import com.kenvix.rconmanager.ui.main.MainActivity;
 import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.ViewAutoLoad;
@@ -70,7 +71,7 @@ public class AddServerActivity extends BaseActivity {
             try(Cursor currentData = serverModel.getBySid(editTargetId)) {
 
                 if(currentData.getCount() <= 0)
-                    throw new IllegalArgumentException("无效服务器 SID: " + editTargetId);
+                    throw new IllegalArgumentException(getString(R.string.error_invalid_sid) + editTargetId);
 
                 addServerPort.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldPort)));
                 addServerName.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldName)));
@@ -125,7 +126,10 @@ public class AddServerActivity extends BaseActivity {
 
         try {
             if (isEditMode()) {
-
+                serverModel.updateBySid(editTargetId, addServerName.getText().toString(),
+                        addServerHost.getText().toString(),
+                        Integer.parseInt(addServerPort.getText().toString()),
+                        addServerPort.getText().toString());
             } else {
                 serverModel.add(addServerName.getText().toString(),
                         addServerHost.getText().toString(),
@@ -134,7 +138,8 @@ public class AddServerActivity extends BaseActivity {
             }
 
             Intent intent = new Intent();
-            intent.putExtra(ParamEditTargetId, true);
+            intent.putExtra(MainActivity.ExtraRequestReload, true);
+            intent.putExtra(MainActivity.ExtraPromptText, isEditMode() ? getString(R.string.success_edit, addServerName.getText().toString()) : getString(R.string.success_add, addServerName.getText().toString()));
             setResult(RESULT_OK, intent);
             finish();
         } catch (Exception ex) {
