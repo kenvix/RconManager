@@ -1,6 +1,7 @@
 package com.kenvix.utils.preprocessor;
 
 import com.kenvix.utils.Environment;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 
 import java.util.Arrays;
@@ -142,5 +143,10 @@ public abstract class BasePreprocessor extends AbstractProcessor {
         return new LinkedHashSet<String>() {{
             Arrays.stream(getSupportedAnnotations()).forEach(annotationClass -> add(annotationClass.getCanonicalName()));
         }};
+    }
+
+    protected ClassName getTargetClassName(Element clazz) {
+        String fullName = clazz.toString();
+        return ClassName.get(fullName.substring(0, fullName.indexOf(clazz.getSimpleName().toString())-1), clazz.getSimpleName().toString());
     }
 }

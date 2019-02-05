@@ -98,8 +98,8 @@ public class ViewPreprocessor extends BasePreprocessor {
 
     @Override
     protected List<MethodSpec.Builder> createMethodBuilder(String methodName, Element clazz) {
-        TypeMirror typeMirror = clazz.asType();
-        ClassName targetClassName = getTargetClassName(clazz);
+        //TypeMirror typeMirror = clazz.asType();
+        //ClassName targetClassName = getTargetClassName(clazz);
 
         return new ArrayList<MethodSpec.Builder>() {{
             add(getCommonFormCheckBuilder(methodName, clazz).
@@ -111,10 +111,5 @@ public class ViewPreprocessor extends BasePreprocessor {
     protected boolean onProcess(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv) {
         filteredAnnotations.forEach(this::processViewAutoLoad);
         return true;
-    }
-
-    private ClassName getTargetClassName(Element clazz) {
-        String fullName = clazz.toString();
-        return ClassName.get(fullName.substring(0, fullName.indexOf(clazz.getSimpleName().toString())-1), clazz.getSimpleName().toString());
     }
 }

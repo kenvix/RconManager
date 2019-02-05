@@ -38,7 +38,7 @@ public class FormPreprocessor extends BasePreprocessor {
 
                 FormNotEmpty annotation = annotatedElement.getAnnotation(FormNotEmpty.class);
 
-                List<MethodSpec.Builder> builders = getMethodBuilder(getFormEmptyCheckerMethodName(targetClassFullName));
+                List<MethodSpec.Builder> builders = getMethodBuilder(getFormEmptyCheckerMethodName(targetClassFullName), targetClass);
                 String RMemberName = StringTools.convertUppercaseLetterToUnderlinedLowercaseLetter(annotatedElement.getSimpleName().toString());
                 Name fieldVarName = annotatedElement.getSimpleName();
                 ClassName RId =  ClassName.get(Environment.TargetAppPackage, "R", "id");
@@ -102,30 +102,25 @@ public class FormPreprocessor extends BasePreprocessor {
         });
     }
 
-    private MethodSpec.Builder getCommonFormCheckBuilder(String methodName) {
+    private MethodSpec.Builder getCommonFormCheckBuilder(String methodName, Element clazz) {
+        ClassName targetClassName = getTargetClassName(clazz);
+
         return MethodSpec
                 .methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 .returns(boolean.class)
-                .addParameter(String.class, "promptText");
+                .addParameter(String.class, "promptText")
+                .addStatement("$T target = ($T) targetRaw", targetClassName, targetClassName);
     }
 
     @Override
-    protected List<MethodSpec.Builder> createMethodBuilder(String methodName) {
-        final boolean generateCodeForViewClass = !methodName.endsWith("Activity");
-        final boolean generateCodeForActivityClass = !generateCodeForViewClass;
-
-        ClassName appCompatClass = ClassName.get("android.support.v7.app", "AppCompatActivity");
-        ClassName viewClass = ClassName.get("android.view", "View");
+    protected List<MethodSpec.Builder> createMethodBuilder(String methodName, Element clazz) {
+        //TypeMirror typeMirror = clazz.asType();
+        //ClassName targetClassName = getTargetClassName(clazz);
 
         return new ArrayList<MethodSpec.Builder>() {{
-            if(generateCodeForActivityClass)
-                add(getCommonFormCheckBuilder(methodName).
-                        addParameter(appCompatClass, "target"));
-
-            if(generateCodeForViewClass)
-                add(getCommonFormCheckBuilder(methodName).
-                        addParameter(viewClass, "target"));
+            add(getCommonFormCheckBuilder(methodName, clazz).
+                    addParameter(Object.class, "targetRaw"));
         }};
     }
 

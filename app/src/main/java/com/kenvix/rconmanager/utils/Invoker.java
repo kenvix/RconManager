@@ -1,5 +1,7 @@
 package com.kenvix.rconmanager.utils;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -8,9 +10,11 @@ import com.kenvix.rconmanager.R;
 import com.kenvix.utils.PreprocessorName;
 
 public final class Invoker {
+    private static AppCompatActivity baseActivityInvocation = null;
     private final static ClassLoader classLoader = Invoker.class.getClassLoader();
     private static Class<?> formChecker;
     private static Class<?> viewToolset;
+
 
     static {
         try {
@@ -33,25 +37,46 @@ public final class Invoker {
         }
     }
 
-    public static <T extends AppCompatActivity> boolean invokeFormChecker(T target) {
+    public static boolean invokeFormChecker(Object targetRaw) {
         try {
-            return (boolean) formChecker.getMethod(PreprocessorName.getFormEmptyCheckerMethodName(target.getClass().getCanonicalName()), String.class, AppCompatActivity.class)
-                    .invoke(null, target.getString(R.string.error_field_required), target);
+            return (boolean) formChecker.getMethod(PreprocessorName.getFormEmptyCheckerMethodName(targetRaw.getClass().getCanonicalName()), String.class, Object.class)
+                    .invoke(null, getString(R.string.error_field_required), targetRaw);
         } catch (Exception ex) {
-            Log.w("Invoker", "No such form checker generated (for AppCompatActivity): " + ex.getMessage());
+            Log.w("Invoker", "No such form checker generated: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }
     }
 
-    public static <T extends View> boolean invokeFormChecker(T target) {
-        try {
-            return (boolean) formChecker.getMethod(PreprocessorName.getFormEmptyCheckerMethodName(target.getClass().getCanonicalName()), String.class, View.class)
-                    .invoke(null, target.getContext().getString(R.string.error_field_required), target);
-        } catch (Exception ex) {
-            Log.w("Invoker", "No such form checker generated (for View): " + ex.getMessage());
-            ex.printStackTrace();
-            return false;
-        }
+    public static AppCompatActivity getBaseActivityInvocation() {
+        return baseActivityInvocation;
+    }
+
+    public static void setBaseActivityInvocation(AppCompatActivity baseActivityInvocation) {
+        Invoker.baseActivityInvocation = baseActivityInvocation;
+    }
+
+    public static String getString(int id, Object... formatArgs) {
+        return baseActivityInvocation.getString(id, formatArgs);
+    }
+
+    public static String getString(int id) {
+        return baseActivityInvocation.getString(id);
+    }
+
+    public static int getColor(int id) {
+        return baseActivityInvocation.getColor(id);
+    }
+
+    public static Drawable getDrawable(int id) {
+        return baseActivityInvocation.getDrawable(id);
+    }
+
+    public static Resources getResources() {
+        return baseActivityInvocation.getResources();
+    }
+
+    public static <T extends View> T findViewById(int id) {
+        return baseActivityInvocation.findViewById(id);
     }
 }

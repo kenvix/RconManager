@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.server.GeneralRconServer;
@@ -22,6 +23,7 @@ import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
+import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
@@ -37,13 +39,9 @@ public class MainActivity extends BaseActivity {
     private ServerAdapter serverAdapter;
     private ServerModel serverModel;
 
-    private void initializeApplication() {
-        IconManager.initialize(this);
-    }
-
     @Override
     protected void initializeElements() {
-        initializeApplication();
+        ApplicationEnvironment.initializeApplication(this);
 
         setSupportActionBar(mainToolbar);
 
