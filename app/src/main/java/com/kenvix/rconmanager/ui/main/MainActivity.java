@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;
@@ -49,7 +50,6 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(this, AddServerActivity.class);
             startActivityForResult(intent, StartAddServerActivityRequestCode);
         });
-
     }
 
     @Override
@@ -122,4 +122,6 @@ public class MainActivity extends BaseActivity {
         serverAdapter = new ServerAdapter(servers, this);
         serverAdapter.initializeRecyclerView(getWindow().getDecorView());
     }
+
+
 }

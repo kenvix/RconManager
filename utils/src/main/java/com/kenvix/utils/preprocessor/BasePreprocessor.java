@@ -2,8 +2,11 @@ package com.kenvix.utils.preprocessor;
 
 import com.kenvix.utils.Environment;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +25,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -148,5 +152,19 @@ public abstract class BasePreprocessor extends AbstractProcessor {
     protected ClassName getTargetClassName(Element clazz) {
         String fullName = clazz.toString();
         return ClassName.get(fullName.substring(0, fullName.indexOf(clazz.getSimpleName().toString())-1), clazz.getSimpleName().toString());
+    }
+
+    protected final JavaFile.Builder getOutputJavaFileBuilder(TypeSpec className) {
+        return JavaFile.builder(Environment.TargetAppPackage + ".generated", className)
+                .addFileComment(getFileHeader());
+    }
+
+    /**
+     *
+     * fuck idea error prompt bug
+     * @param javaFile
+     */
+    protected final void saveOutputJavaFile(JavaFile javaFile) throws IOException {
+        javaFile.writeTo(filer);
     }
 }

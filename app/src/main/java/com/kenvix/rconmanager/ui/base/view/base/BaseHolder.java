@@ -15,7 +15,7 @@ public abstract class BaseHolder<T> extends RecyclerView.ViewHolder {
 
     public BaseHolder(@NonNull View itemView) {
         super(itemView);
-        Invoker.invokeViewAutoLoader(itemView);
+        Invoker.invokeViewAutoLoader(this, itemView);
     }
 
     public abstract void bindView(T data);

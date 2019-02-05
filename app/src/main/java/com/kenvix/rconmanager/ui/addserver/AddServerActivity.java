@@ -32,7 +32,7 @@ public class AddServerActivity extends BaseActivity {
     public EditText addServerHost;
     @ViewAutoLoad
     @FormNotEmpty
-    @FormNumberLessOrEqual(25565)
+    @FormNumberLessOrEqual(65535)
     @FormNumberMoreOrEqual(1)
     public EditText addServerPort;
     @ViewAutoLoad

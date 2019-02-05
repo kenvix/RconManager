@@ -30,9 +30,21 @@ public final class Invoker {
             viewToolset.getMethod(PreprocessorName.getViewAutoLoaderMethodName(targetRaw.getClass().getCanonicalName()), Object.class)
                     .invoke(null, targetRaw);
         } catch (NoSuchMethodException ex) {
-
+            Log.i("Invoker for Activity", "Invoker can't detect loader method, may cause NullPointerException: " + ex.getMessage());
         } catch (Exception ex) {
-            Log.w("Invoker", "No such view auto loader generated: " + ex.getMessage());
+            Log.w("Invoker for Activity", "No such view auto loader generated: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public static void invokeViewAutoLoader(Object targetRaw, View targetView) {
+        try {
+            viewToolset.getMethod(PreprocessorName.getViewAutoLoaderMethodName(targetRaw.getClass().getCanonicalName()), Object.class, View.class)
+                    .invoke(null, targetRaw, targetView);
+        } catch (NoSuchMethodException ex) {
+            Log.i("Invoker for Activity", "Invoker can't detect loader method, may cause NullPointerException: " + ex.getMessage());
+        } catch (Exception ex) {
+            Log.w("Invoker for View", "No such view auto loader generated: " + ex.getMessage());
             ex.printStackTrace();
         }
     }

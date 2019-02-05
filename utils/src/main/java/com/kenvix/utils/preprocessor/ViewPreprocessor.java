@@ -48,12 +48,10 @@ public class ViewPreprocessor extends BasePreprocessor {
                 .addMethods(methods)
                 .build();
 
-        JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", viewToolset)
-                .addFileComment(getFileHeader())
-                .build();
+        JavaFile javaFile = getOutputJavaFileBuilder(viewToolset).build();
 
         try {
-            javaFile.writeTo(filer);
+            saveOutputJavaFile(javaFile);
         } catch (IOException ex) {
             throw new IllegalStateException(ex.toString());
         }
@@ -76,11 +74,21 @@ public class ViewPreprocessor extends BasePreprocessor {
                 Name fieldVarName = annotatedElement.getSimpleName();
                 ClassName RId =  ClassName.get(Environment.TargetAppPackage, "R", "id");
 
-                builders.forEach(builder -> builder
-                        .addStatement("target.$N = target.findViewById($T.$N)",
-                                fieldVarName,
-                                RId,
-                                RMemberName));
+                final boolean generateCodeForActivityClass = targetClassFullName.endsWith("Activity");
+
+                if(generateCodeForActivityClass) {
+                    builders.forEach(builder -> builder
+                            .addStatement("target.$N = target.findViewById($T.$N)",
+                                    fieldVarName,
+                                    RId,
+                                    RMemberName));
+                } else {
+                    builders.forEach(builder -> builder
+                            .addStatement("target.$N = targetView.findViewById($T.$N)",
+                                    fieldVarName,
+                                    RId,
+                                    RMemberName));
+                }
             }
         });
     }
@@ -99,11 +107,18 @@ public class ViewPreprocessor extends BasePreprocessor {
     @Override
     protected List<MethodSpec.Builder> createMethodBuilder(String methodName, Element clazz) {
         //TypeMirror typeMirror = clazz.asType();
-        //ClassName targetClassName = getTargetClassName(clazz);
+        final boolean generateCodeForActivityClass = methodName.endsWith("Activity");
+        ClassName targetViewClassName = ClassName.get("android.view", "View");
 
         return new ArrayList<MethodSpec.Builder>() {{
-            add(getCommonFormCheckBuilder(methodName, clazz).
-                    addParameter(Object.class, "targetRaw"));
+            if(generateCodeForActivityClass) {
+                add(getCommonFormCheckBuilder(methodName, clazz)
+                        .addParameter(Object.class, "targetRaw"));
+            } else {
+                add(getCommonFormCheckBuilder(methodName, clazz)
+                        .addParameter(Object.class, "targetRaw")
+                        .addParameter(targetViewClassName, "targetView"));
+            }
         }};
     }
 

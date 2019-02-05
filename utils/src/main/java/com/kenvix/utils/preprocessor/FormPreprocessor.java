@@ -148,12 +148,10 @@ public class FormPreprocessor extends BasePreprocessor {
                 .addMethods(methods)
                 .build();
 
-        JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", formChecker)
-                .addFileComment(getFileHeader())
-                .build();
+        JavaFile javaFile = getOutputJavaFileBuilder(formChecker).build();
 
         try {
-            javaFile.writeTo(filer);
+            saveOutputJavaFile(javaFile);
         } catch (IOException ex) {
             throw new IllegalStateException(ex.toString());
         }
