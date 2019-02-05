@@ -43,4 +43,5 @@
     <string name="success_duplicated">成功制作 %s 的副本</string>
     <string name="text_share_server">Rcon 服务器信息\n名称：%s\n地址：%s\n端口号：%d\n密码：%s</string>
     <string name="prompt_share_server">分享服务器信息 （注意：Rcon 服务器密码也会被分享）</string>
+    <string name="prompt_command">命令</string>
 </resources>

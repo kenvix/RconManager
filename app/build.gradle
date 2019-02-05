@@ -50,4 +50,3 @@ buildscript {
         //classpath group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'
     }
 }
-
