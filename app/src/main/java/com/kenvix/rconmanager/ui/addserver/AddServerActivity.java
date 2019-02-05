@@ -77,7 +77,7 @@ public class AddServerActivity extends BaseActivity {
                 addServerHost.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldHost)));
                 addServerPassword.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldPassword)));
             } catch (Exception ex) {
-                exceptionPrompt(ex);
+                exceptionToastPrompt(ex);
                 ex.printStackTrace();
                 setResult(RESULT_CANCELED);
                 finish();
@@ -99,27 +99,28 @@ public class AddServerActivity extends BaseActivity {
     }
 
     @Override
-    protected int getLayout() {
+    protected int getBaseLayout() {
         return R.layout.activity_add_server;
     }
 
-    private boolean checkForm(View view) {
-        if(!Invoker.invokeFormChecker(this))
-            return false;
+    @Override
+    protected int getBaseContainer() {
+        return R.id.add_server_container;
+    }
 
-        int port = Integer.parseInt(addServerPort.getText().toString());
-        return port >= 1 && port <= 25565;
+    private boolean checkForm() {
+        return Invoker.invokeFormChecker(this);
     }
 
     private void onServerFormTest(View view) {
-        if(!checkForm(view))
+        if(!checkForm())
             return;
 
 
     }
 
     private void onServerFormSubmit(View view) {
-        if(!checkForm(view))
+        if(!checkForm())
             return;
 
         try {
@@ -137,7 +138,7 @@ public class AddServerActivity extends BaseActivity {
             setResult(RESULT_OK, intent);
             finish();
         } catch (Exception ex) {
-            exceptionPrompt(ex);
+            exceptionToastPrompt(ex);
         }
     }
 }

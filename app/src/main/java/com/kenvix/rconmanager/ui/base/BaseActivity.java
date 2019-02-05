@@ -24,7 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayout());
+        setContentView(getBaseLayout());
         Invoker.invokeViewAutoLoader(this);
 
         initializeElements();
@@ -42,8 +42,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         Snackbar.make(container, text, snackLength).show();
     }
 
-    public void exceptionPrompt(Throwable throwable) {
+    public void snackbar(View container, String text) {
+        snackbar(container, text, Snackbar.LENGTH_SHORT);
+    }
+
+    public void snackbar(String text, int snackLength) {
+        Snackbar.make(findViewById(getBaseContainer()), text, snackLength).show();
+    }
+
+    public void snackbar(String text) {
+        snackbar(text, Snackbar.LENGTH_SHORT);
+    }
+
+    public void exceptionToastPrompt(Throwable throwable) {
         toast(getString(R.string.error_operation_failed) + throwable.getLocalizedMessage());
+        Log.w("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
+        throwable.printStackTrace();
+    }
+
+    public void exceptionSnackbarPrompt(Throwable throwable) {
+        snackbar(getString(R.string.error_operation_failed) + throwable.getLocalizedMessage());
         Log.w("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
         throwable.printStackTrace();
     }
@@ -91,5 +109,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected abstract void initializeElements();
-    protected abstract int getLayout();
+    protected abstract int getBaseLayout();
+    protected abstract int getBaseContainer();
 }

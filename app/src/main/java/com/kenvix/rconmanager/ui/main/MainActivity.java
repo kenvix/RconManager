@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        loadServerRecyclerView();
+        reloadServerRecyclerView();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
 
             if(requestCode == StartAddServerActivityRequestCode) {
                 if(data.getBooleanExtra(AddServerActivity.ParamRequestReload, false))
-                    loadServerRecyclerView();
+                    reloadServerRecyclerView();
             }
 
         }
@@ -92,11 +92,16 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected int getLayout() {
+    protected int getBaseLayout() {
         return R.layout.activity_main;
     }
 
-    private void loadServerRecyclerView() {
+    @Override
+    protected int getBaseContainer() {
+        return R.id.main_container;
+    }
+
+    public void reloadServerRecyclerView() {
         List<RconServer> servers = new ArrayList<>();
         serverModel = new ServerModel(this);
 
@@ -118,5 +123,9 @@ public class MainActivity extends BaseActivity {
 
         serverAdapter = new ServerAdapter(servers, this);
         serverAdapter.initializeRecyclerView(getWindow().getDecorView());
+    }
+
+    public ServerModel getServerModel() {
+        return serverModel;
     }
 }

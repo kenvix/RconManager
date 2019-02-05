@@ -16,11 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.base.view.base.BaseHolder;
 import com.kenvix.rconmanager.ui.main.MainActivity;
+import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreateContextMenuListener {
@@ -41,25 +43,56 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         this.rconServer = server;
         serverName.setText(server.getName());
         serverAddress.setText(server.getHostAndPort());
+
         serverItem.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), AddServerActivity.class);
-            intent.putExtra(AddServerActivity.ParamEditTargetId, server.getSid());
-            ((Activity) view.getContext()).startActivityForResult(intent, MainActivity.StartAddServerActivityRequestCode);
+
         });
-    }
-
-    public void onMenuEdit(MenuItem item) {
-
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         MainActivity activity = (MainActivity) getActivityByView(v);
         activity.getMenuInflater().inflate(R.menu.menu_server_item, menu);
+        ServerModel serverModel = activity.getServerModel();
 
-        menu.findItem(R.id.action_server_item_edit).setOnMenuItemClickListener(view -> {
-            activity.confirmDialog(result -> activity.toast("Click edit: " + result),"sasadas","dd");
+        menu.findItem(R.id.action_server_item_delete).setOnMenuItemClickListener(view -> {
+            activity.confirmDialog(activity.getString(R.string.confirm_server_delete, rconServer.getName()), result -> {
+                if(result) {
+                    try {
+                        serverModel.deleteBySid(rconServer.getSid());
+                        activity.snackbar(activity.getString(R.string.prompt_deleted, rconServer.getName()));
+                        activity.reloadServerRecyclerView();
+                    } catch (Exception ex) {
+                        activity.exceptionSnackbarPrompt(ex);
+                    }
+                }
+            });
             return true;
         });
+
+        menu.findItem(R.id.action_server_item_duplicate).setOnMenuItemClickListener(view -> {
+
+            return true;
+        });
+
+        menu.findItem(R.id.action_server_item_edit).setOnMenuItemClickListener(view -> {
+            Intent intent = new Intent(activity, AddServerActivity.class);
+            intent.putExtra(AddServerActivity.ParamEditTargetId, rconServer.getSid());
+            activity.startActivityForResult(intent, MainActivity.StartAddServerActivityRequestCode);
+            return true;
+        });
+
+        menu.findItem(R.id.action_server_item_share).setOnMenuItemClickListener(view -> {
+
+            return true;
+        });
+    }
+
+    public void onMenuRefresh(MenuItem item) {
+
+    }
+
+    public void onMenuSettings(MenuItem item) {
+
     }
 }
