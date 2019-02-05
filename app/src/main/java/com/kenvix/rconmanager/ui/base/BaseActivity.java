@@ -6,7 +6,9 @@
 package com.kenvix.rconmanager.ui.base;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.utils.Invoker;
+
+import java.util.function.Consumer;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -26,22 +30,64 @@ public abstract class BaseActivity extends AppCompatActivity {
         initializeElements();
     }
 
-    protected void makeSimpleToast(String text, int toastLength) {
+    public void toast(String text, int toastLength) {
         Toast.makeText(this, text, toastLength).show();
     }
 
-    protected void makeSimpleToast(String text) {
-        makeSimpleToast(text, Toast.LENGTH_LONG);
+    public void toast(String text) {
+        toast(text, Toast.LENGTH_LONG);
     }
 
-    protected void makeSimpleSnackbar(View container, String text, int snackLength) {
+    public void snackbar(View container, String text, int snackLength) {
         Snackbar.make(container, text, snackLength).show();
     }
 
-    protected void makeExceptionPrompt(Throwable throwable) {
-        makeSimpleToast(getString(R.string.error_operation_failed) + throwable.getLocalizedMessage());
+    public void exceptionPrompt(Throwable throwable) {
+        toast(getString(R.string.error_operation_failed) + throwable.getLocalizedMessage());
         Log.w("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
         throwable.printStackTrace();
+    }
+
+    public void confirmDialog(String text, @Nullable String title, @Nullable Consumer<Boolean> callback) {
+        getConfirmBuilder(text, title, callback).show();
+    }
+
+    public void confirmDialog(String text, @Nullable Consumer<Boolean> callback) {
+        getConfirmBuilder(text, null, callback).show();
+    }
+
+    public void alertDialog(String text, @Nullable String title, @Nullable Consumer<Boolean> callback) {
+        getAlertBuilder(text, title, callback).show();
+    }
+
+    public void alertDialog(String text, @Nullable Consumer<Boolean> callback) {
+        getAlertBuilder(text, null, callback).show();
+    }
+
+    public void alertDialog(String text) {
+        getAlertBuilder(text, null, null).show();
+    }
+
+    public AlertDialog.Builder getAlertBuilder(String text, @Nullable String title, @Nullable Consumer<Boolean> callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage(text)
+                .setPositiveButton(getString(R.string.action_ok), (dialog, which) -> {
+                    if (callback != null)
+                        callback.accept(true);
+                });
+
+        if (title == null)
+            return builder;
+        else
+            return builder.setTitle(title);
+    }
+
+    public AlertDialog.Builder getConfirmBuilder(String text, @Nullable String title, @Nullable Consumer<Boolean> callback) {
+        return getAlertBuilder(text, title, callback)
+                .setNegativeButton(getString(R.string.action_cancel),(dialog, which) -> {
+                    if(callback != null)
+                        callback.accept(false);
+                });
     }
 
     protected abstract void initializeElements();

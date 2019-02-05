@@ -107,7 +107,7 @@ public class FormPreprocessor extends BasePreprocessor {
 
         return MethodSpec
                 .methodBuilder(methodName)
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(boolean.class)
                 .addParameter(String.class, "promptText")
                 .addStatement("$T target = ($T) targetRaw", targetClassName, targetClassName);

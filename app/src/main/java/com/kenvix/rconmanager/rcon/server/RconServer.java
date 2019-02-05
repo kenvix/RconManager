@@ -8,24 +8,23 @@ package com.kenvix.rconmanager.rcon.server;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public abstract class RconServer {
-    @NonNull
+public abstract class RconServer implements Cloneable, Serializable {
+    private int sid = -1;
     private String host;
-
-    @NonNull
     private String password;
-
-    @NonNull
     private String name;
-
     private int port;
 
-    public RconServer(@NonNull String name, @NonNull String host, int port,  @NonNull String password) {
+    public RconServer(String name, String host, int port, String password) {
         this.host = host;
         this.port = port;
         this.password = password;
         this.name = name;
+    }
+
+    public RconServer() {
     }
 
     public int getPort() {
@@ -47,12 +46,41 @@ public abstract class RconServer {
         return host;
     }
 
+    public int getSid() {
+        return sid;
+    }
+
+    public RconServer setSid(int sid) {
+        this.sid = sid;
+        return this;
+    }
+
     public String getHostAndPort() {
         return host + ":" + port;
     }
 
     public abstract void connect() throws IOException;
     public abstract void disconnect();
-
     public abstract void runCommand(String command) throws IOException;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+       return super.clone();
+    }
+
+    public void setHost(@NonNull String host) {
+        this.host = host;
+    }
+
+    public void setPassword(@NonNull String password) {
+        this.password = password;
+    }
+
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
 }

@@ -4,6 +4,10 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:id="@+id/server_item"
+    android:clickable="true"
+    android:longClickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_height="@dimen/item_server_height">
 
     <LinearLayout

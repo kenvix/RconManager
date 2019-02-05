@@ -8,6 +8,12 @@
     <string name="title_main">Rcon 服务器列表</string>
     <string name="no_server">未添加任何 MineCraft 服务器</string>
     <string name="action_settings">设置</string>
+    <string name="action_duplicate">制作副本</string>
+    <string name="action_share">分享</string>
+    <string name="action_delete">删除</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_ok">确认</string>
+    <string name="action_cancel">取消</string>
     <string name="server_name_default_text">Server</string>
     <string name="server_address_default_text">Host:Port</string>
     <!-- Strings related to Add Server -->

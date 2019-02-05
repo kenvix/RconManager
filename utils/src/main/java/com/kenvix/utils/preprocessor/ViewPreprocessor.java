@@ -98,7 +98,7 @@ public class ViewPreprocessor extends BasePreprocessor {
 
         return MethodSpec
                 .methodBuilder(methodName)
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addStatement("$T target = ($T) targetRaw", targetClassName, targetClassName)
                 .returns(void.class);
     }

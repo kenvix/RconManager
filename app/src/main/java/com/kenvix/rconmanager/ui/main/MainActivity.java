@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;
@@ -22,9 +21,7 @@ import com.kenvix.rconmanager.rcon.server.GeneralRconServer;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
-import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
-import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
@@ -111,17 +108,15 @@ public class MainActivity extends BaseActivity {
                         serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldHost)),
                         serverCursor.getInt(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPort)),
                         serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPassword))
-                ));
+                ).setSid(serverCursor.getInt(serverCursor.getColumnIndexOrThrow(ServerModel.FieldSid))));
             }
 
         } catch (Exception ex) {
-            makeSimpleToast(getString(R.string.error_unable_load_servers) + ex.getLocalizedMessage());
+            toast(getString(R.string.error_unable_load_servers) + ex.getLocalizedMessage());
             ex.printStackTrace();
         }
 
         serverAdapter = new ServerAdapter(servers, this);
         serverAdapter.initializeRecyclerView(getWindow().getDecorView());
     }
-
-
 }

@@ -42,6 +42,28 @@ public abstract class BaseModel {
         return getReadableDatabase().query(tableName, columns, whereClause, whereArgs, groupBy, having, orderBy);
     }
 
+    Cursor select(String whereClause, String[] whereArgs, @Nullable String groupBy, @Nullable String having, @Nullable String orderBy) {
+        return select( whereClause, whereArgs, groupBy, having, orderBy, null);
+    }
+
+    Cursor select(String whereClause, String[] whereArgs, @Nullable String orderBy) {
+        return select( whereClause, whereArgs, null, null, orderBy, null);
+    }
+
+    Cursor select(String whereClause, String[] whereArgs) {
+        return select( whereClause, whereArgs, null, null, null, null);
+    }
+
+    Cursor selectOne(String whereClause, String[] whereArgs, @Nullable String[] columns) {
+        Cursor cursor = getReadableDatabase().query(tableName, columns, whereClause, whereArgs, null, null, null);
+        cursor.moveToFirst();
+        return cursor;
+    }
+
+    Cursor selectOne(String whereClause, String[] whereArgs) {
+        return selectOne(whereClause, whereArgs, null);
+    }
+
     int delete(String whereClause, String[] whereArgs) {
         return getWritableDatabase().delete(tableName, whereClause, whereArgs);
     }
@@ -90,5 +112,13 @@ public abstract class BaseModel {
         transactionReadModeDatabase = null;
 
         transactionWriteModeDatabase.endTransaction();
+    }
+
+    String[] getSignleWhereValue(String value) {
+        return new String[] {value};
+    }
+
+    String[] getSignleWhereValue(Object value) {
+        return new String[] {String.valueOf(value)};
     }
 }

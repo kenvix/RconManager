@@ -1,6 +1,7 @@
 package com.kenvix.rconmanager.ui.addserver;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -66,7 +67,21 @@ public class AddServerActivity extends BaseActivity {
             addServerEditMode.setVisibility(View.VISIBLE);
             addServerEditModeTargetId.setText("#" + String.valueOf(editTargetId));
 
+            try(Cursor currentData = serverModel.getBySid(editTargetId)) {
 
+                if(currentData.getCount() <= 0)
+                    throw new IllegalArgumentException("无效服务器 SID: " + editTargetId);
+
+                addServerPort.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldPort)));
+                addServerName.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldName)));
+                addServerHost.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldHost)));
+                addServerPassword.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldPassword)));
+            } catch (Exception ex) {
+                exceptionPrompt(ex);
+                ex.printStackTrace();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
         } else {
             addServerEditMode.setVisibility(View.INVISIBLE);
         }
@@ -122,7 +137,7 @@ public class AddServerActivity extends BaseActivity {
             setResult(RESULT_OK, intent);
             finish();
         } catch (Exception ex) {
-            makeExceptionPrompt(ex);
+            exceptionPrompt(ex);
         }
     }
 }

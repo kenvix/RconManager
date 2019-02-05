@@ -16,6 +16,9 @@ public class GeneralRconServer extends RconServer {
         super(name, host, port, password);
     }
 
+    public GeneralRconServer() {
+    }
+
     @Override
     public void connect() throws IOException {
 
