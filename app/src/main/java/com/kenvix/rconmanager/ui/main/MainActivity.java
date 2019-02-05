@@ -46,13 +46,18 @@ public class MainActivity extends BaseActivity {
         initializeApplication();
 
         setSupportActionBar(mainToolbar);
-        loadServerRecyclerView();
 
         mainFab.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddServerActivity.class);
             startActivityForResult(intent, StartAddServerActivityRequestCode);
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadServerRecyclerView();
     }
 
     @Override

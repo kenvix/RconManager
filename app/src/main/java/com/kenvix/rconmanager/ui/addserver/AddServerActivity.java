@@ -15,25 +15,25 @@ import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 import com.kenvix.utils.annotation.form.FormNumberLessOrEqual;
+import com.kenvix.utils.annotation.form.FormNumberMoreOrEqual;
 
 public class AddServerActivity extends BaseActivity {
     public static final String ParamEditTargetId = "edit_target_id";
     public static final String ParamRequestReload = "request_reload";
 
-    private final String FormTag = "AddServerActivity";
-
     private int editTargetId = -1;
     private ServerModel serverModel;
 
     @ViewAutoLoad
-    @FormNotEmpty(FormTag)
+    @FormNotEmpty
     public EditText addServerName;
     @ViewAutoLoad
-    @FormNotEmpty(FormTag)
+    @FormNotEmpty
     public EditText addServerHost;
     @ViewAutoLoad
-    @FormNotEmpty(FormTag)
-    @FormNumberLessOrEqual(FormTag, 25565)
+    @FormNotEmpty
+    @FormNumberLessOrEqual(25565)
+    @FormNumberMoreOrEqual(1)
     public EditText addServerPort;
     @ViewAutoLoad
     public EditText addServerPassword;
@@ -89,16 +89,23 @@ public class AddServerActivity extends BaseActivity {
     }
 
     private boolean checkForm(View view) {
+        if(!Invoker.invokeFormChecker(this))
+            return false;
+
         int port = Integer.parseInt(addServerPort.getText().toString());
-        return port >= 1 && port <= 25565 && Invoker.invokeFormChecker(FormTag, this);
+        return port >= 1 && port <= 25565;
     }
 
     private void onServerFormTest(View view) {
-        checkForm(view);
+        if(!checkForm(view))
+            return;
+
+
     }
 
     private void onServerFormSubmit(View view) {
-        checkForm(view);
+        if(!checkForm(view))
+            return;
 
         try {
             if (isEditMode()) {

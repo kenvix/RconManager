@@ -31,60 +31,33 @@ import static com.kenvix.utils.PreprocessorName.getViewAutoLoaderMethodName;
 public class ViewPreprocessor extends BasePreprocessor {
 
     @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new LinkedHashSet<String>() {{
-            add(ViewAutoLoad.class.getCanonicalName());
-        }};
+    public Class[] getSupportedAnnotations() {
+        return new Class[] {ViewAutoLoad.class};
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> rootElements = roundEnv.getRootElements();
-        Map<Element, List<Element>> tasks = new HashMap<>();
+    protected boolean onProcessingOver(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv) {
+        List<MethodSpec> methods = new LinkedList<>();
 
-        for (Element classElement : rootElements) {
-            if(classElement.toString().startsWith(Environment.TargetAppPackage)) {
-                List<? extends Element> enclosedElements = classElement.getEnclosedElements();
+        getMethodBuffer().forEach((name, builderList) ->
+                builderList.forEach(methodBuilder -> methods.add(methodBuilder.build()))
+        );
 
-                for(Element enclosedElement : enclosedElements) {
-                    List<? extends AnnotationMirror> annotationMirrors = enclosedElement.getAnnotationMirrors();
+        TypeSpec viewToolset = TypeSpec.classBuilder("ViewToolset")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addMethods(methods)
+                .build();
 
-                    for (AnnotationMirror annotationMirror : annotationMirrors) {
-                        if(ViewAutoLoad.class.getName().equals(annotationMirror.getAnnotationType().toString())) {
-                            if(!tasks.containsKey(classElement))
-                                tasks.put(classElement, new LinkedList<>());
+        JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", viewToolset)
+                .addFileComment(getFileHeader())
+                .build();
 
-                            tasks.get(classElement).add(enclosedElement);
-                        }
-                    }
-                }
-            }
+        try {
+            javaFile.writeTo(filer);
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex.toString());
         }
 
-        tasks.forEach(this::processViewAutoLoad);
-
-        if(roundEnv.processingOver()) {
-            List<MethodSpec> methods = new LinkedList<>();
-
-            getMethodBuffer().forEach((name, builderList) ->
-                    builderList.forEach(methodBuilder -> methods.add(methodBuilder.build()))
-            );
-
-            TypeSpec viewToolset = TypeSpec.classBuilder("ViewToolset")
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    .addMethods(methods)
-                    .build();
-
-            JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", viewToolset)
-                    .addFileComment(getFileHeader())
-                    .build();
-
-            try {
-                javaFile.writeTo(filer);
-            } catch (IOException ex) {
-                throw new IllegalStateException(ex.toString());
-            }
-        }
         return true;
     }
 
@@ -132,6 +105,12 @@ public class ViewPreprocessor extends BasePreprocessor {
             add(getCommonFormCheckBuilder(methodName, clazz).
                     addParameter(Object.class, "targetRaw"));
         }};
+    }
+
+    @Override
+    protected boolean onProcess(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv) {
+        filteredAnnotations.forEach(this::processViewAutoLoad);
+        return true;
     }
 
     private ClassName getTargetClassName(Element clazz) {

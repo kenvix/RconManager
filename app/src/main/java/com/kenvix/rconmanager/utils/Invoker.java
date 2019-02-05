@@ -33,9 +33,9 @@ public final class Invoker {
         }
     }
 
-    public static <T extends AppCompatActivity> boolean invokeFormChecker(String formTag, T target) {
+    public static <T extends AppCompatActivity> boolean invokeFormChecker(T target) {
         try {
-            return (boolean) formChecker.getMethod(PreprocessorName.getFormCheckerMethodName(formTag), String.class, AppCompatActivity.class)
+            return (boolean) formChecker.getMethod(PreprocessorName.getFormEmptyCheckerMethodName(target.getClass().getCanonicalName()), String.class, AppCompatActivity.class)
                     .invoke(null, target.getString(R.string.error_field_required), target);
         } catch (Exception ex) {
             Log.w("Invoker", "No such form checker generated (for AppCompatActivity): " + ex.getMessage());
@@ -44,9 +44,9 @@ public final class Invoker {
         }
     }
 
-    public static <T extends View> boolean invokeFormChecker(String formTag, T target) {
+    public static <T extends View> boolean invokeFormChecker(T target) {
         try {
-            return (boolean) formChecker.getMethod(PreprocessorName.getFormCheckerMethodName(formTag), String.class, View.class)
+            return (boolean) formChecker.getMethod(PreprocessorName.getFormEmptyCheckerMethodName(target.getClass().getCanonicalName()), String.class, View.class)
                     .invoke(null, target.getContext().getString(R.string.error_field_required), target);
         } catch (Exception ex) {
             Log.w("Invoker", "No such form checker generated (for View): " + ex.getMessage());

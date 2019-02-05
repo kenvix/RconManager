@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.FIELD)
 public @interface FormNumberLessOrEqual {
-    String value();
+    int value();
 }

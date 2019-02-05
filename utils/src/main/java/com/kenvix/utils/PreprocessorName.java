@@ -7,7 +7,7 @@ public class PreprocessorName {
         return "autoLoad" + StringTools.makeFirstLetterUppercase(convertPackageNameToUppercaseLetter(tag));
     }
 
-    public static String getFormCheckerMethodName(String tag) {
-        return StringTools.makeFirstLetterLowercase(tag);
+    public static String getFormEmptyCheckerMethodName(String tag) {
+        return StringTools.makeFirstLetterLowercase(convertPackageNameToUppercaseLetter(tag));
     }
 }

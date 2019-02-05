@@ -1,20 +1,27 @@
 package com.kenvix.utils.preprocessor;
 
+import com.kenvix.utils.Environment;
 import com.squareup.javapoet.MethodSpec;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -75,6 +82,10 @@ public abstract class BasePreprocessor extends AbstractProcessor {
     protected List<MethodSpec.Builder> createMethodBuilder(String methodName) { return null; }
     protected List<MethodSpec.Builder> createMethodBuilder(String methodName, Element clazz) { return null; }
 
+    protected abstract boolean onProcess(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv);
+    protected abstract Class[] getSupportedAnnotations();
+    protected abstract boolean onProcessingOver(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv);
+
     @Override
     public synchronized final void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
@@ -93,5 +104,43 @@ public abstract class BasePreprocessor extends AbstractProcessor {
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.latestSupported();
+    }
+
+    @Override
+    public final boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        Set<? extends Element> rootElements = roundEnv.getRootElements();
+        Map<Element, List<Element>> tasks = new HashMap<>();
+        Class[] supportedAnnotations = getSupportedAnnotations();
+
+        for (Element classElement : rootElements) {
+            if(classElement.toString().startsWith(Environment.TargetAppPackage)) {
+                List<? extends Element> enclosedElements = classElement.getEnclosedElements();
+
+                for(Element enclosedElement : enclosedElements) {
+                    List<? extends AnnotationMirror> annotationMirrors = enclosedElement.getAnnotationMirrors();
+
+                    for (AnnotationMirror annotationMirror : annotationMirrors) {
+
+                        for(Class supportedAnnotation : supportedAnnotations) {
+                            if(supportedAnnotation.getName().equals(annotationMirror.getAnnotationType().toString())) {
+                                if(!tasks.containsKey(classElement))
+                                    tasks.put(classElement, new LinkedList<>());
+
+                                tasks.get(classElement).add(enclosedElement);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return onProcess(tasks, annotations, roundEnv) && (!roundEnv.processingOver() || onProcessingOver(tasks, annotations, roundEnv));
+    }
+
+    @Override
+    public final Set<String> getSupportedAnnotationTypes() {
+        return new LinkedHashSet<String>() {{
+            Arrays.stream(getSupportedAnnotations()).forEach(annotationClass -> add(annotationClass.getCanonicalName()));
+        }};
     }
 }

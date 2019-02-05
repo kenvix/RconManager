@@ -1,9 +1,8 @@
 package com.kenvix.utils.preprocessor;
 
 import com.kenvix.utils.Environment;
-import com.kenvix.utils.PreprocessorName;
 import com.kenvix.utils.StringTools;
-import com.kenvix.utils.annotation.form.FormNotEmpty;
+import com.kenvix.utils.annotation.form.*;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -12,9 +11,9 @@ import com.squareup.javapoet.TypeVariableName;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.RoundEnvironment;
@@ -23,69 +22,48 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+
+import static com.kenvix.utils.PreprocessorName.getFormEmptyCheckerMethodName;
 
 public class FormPreprocessor extends BasePreprocessor {
 
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new LinkedHashSet<String>() {{
-            add(FormNotEmpty.class.getCanonicalName());
-        }};
-    }
+    private void processFormNotEmpty(Element targetClass, List<Element> annotatedElements) {
+        TypeMirror targetClassType = targetClass.asType();
+        String targetClassFullName = getFormEmptyCheckerMethodName(targetClass.toString());
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        roundEnv.getElementsAnnotatedWith(FormNotEmpty.class).forEach(this::processFormNotEmpty);
+        annotatedElements.forEach(annotatedElement -> {
+            if(annotatedElement.getKind() == ElementKind.FIELD) {
+                TypeMirror fieldType = annotatedElement.asType();
 
-        if(roundEnv.processingOver()) {
-            List<MethodSpec> methods = new LinkedList<>();
+                FormNotEmpty annotation = annotatedElement.getAnnotation(FormNotEmpty.class);
 
-            getMethodBuffer().forEach((name, builderList) ->
-                    builderList.forEach(methodBuilder -> methods.add(methodBuilder.addStatement("return true").build()))
-            );
+                List<MethodSpec.Builder> builders = getMethodBuilder(getFormEmptyCheckerMethodName(targetClassFullName));
+                String RMemberName = StringTools.convertUppercaseLetterToUnderlinedLowercaseLetter(annotatedElement.getSimpleName().toString());
+                Name fieldVarName = annotatedElement.getSimpleName();
+                ClassName RId =  ClassName.get(Environment.TargetAppPackage, "R", "id");
 
-            TypeSpec formChecker = TypeSpec.classBuilder("FormChecker")
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    .addMethods(methods)
-                    .build();
+                builders.forEach(builder -> builder
+                        .addStatement("$T $N = target.findViewById($T.$N)",
+                                fieldType,
+                                fieldVarName,
+                                RId,
+                                RMemberName)
+                        .beginControlFlow("if($N.getText().toString().isEmpty())", fieldVarName)
+                        .addStatement("$N.setError($L) ", fieldVarName, "promptText")
+                        .addStatement("return false")
+                        .endControlFlow());
 
-            JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", formChecker)
-                    .addFileComment(getFileHeader())
-                    .build();
+                FormNumberLess formNumberLess = annotatedElement.getAnnotation(FormNumberLess.class);
+                FormNumberMore formNumberMore = annotatedElement.getAnnotation(FormNumberMore.class);
+                FormNumberLessOrEqual formNumberLessOrEqual = annotatedElement.getAnnotation(FormNumberLessOrEqual.class);
+                FormNumberMoreOrEqual formNumberMoreOrEqual = annotatedElement.getAnnotation(FormNumberMoreOrEqual.class);
 
-            try {
-                javaFile.writeTo(filer);
-            } catch (IOException ex) {
-                throw new IllegalStateException(ex.toString());
+                if(formNumberLess != null || formNumberLessOrEqual != null || formNumberMore != null || formNumberMoreOrEqual != null) {
+
+                }
             }
-        }
-        return true;
-    }
-
-    private void processFormNotEmpty(Element annotatedElement) {
-        if(annotatedElement.getKind() == ElementKind.FIELD) {
-            TypeMirror fieldType = annotatedElement.asType();
-
-            FormNotEmpty annotation = annotatedElement.getAnnotation(FormNotEmpty.class);
-            
-            List<MethodSpec.Builder> builders = getMethodBuilder(PreprocessorName.getFormCheckerMethodName(annotation.value()));
-            String RMemberName = StringTools.convertUppercaseLetterToUnderlinedLowercaseLetter(annotatedElement.getSimpleName().toString());
-            Name fieldVarName = annotatedElement.getSimpleName();
-            ClassName RId =  ClassName.get(Environment.TargetAppPackage, "R", "id");
-
-            builders.forEach(builder -> builder
-                    .addStatement("$T $N = target.findViewById($T.$N)",
-                            fieldType,
-                            fieldVarName,
-                            RId,
-                            RMemberName)
-                    .beginControlFlow("if($N.getText().toString().isEmpty())", fieldVarName)
-                    .addStatement("$N.setError($L) ", fieldVarName, "promptText")
-                    .addStatement("return false")
-                    .endControlFlow());
-        }
+        });
     }
 
     private MethodSpec.Builder getCommonFormCheckBuilder(String methodName) {
@@ -99,7 +77,7 @@ public class FormPreprocessor extends BasePreprocessor {
     @Override
     protected List<MethodSpec.Builder> createMethodBuilder(String methodName) {
         final boolean generateCodeForViewClass = !methodName.endsWith("Activity");
-        final boolean generateCodeForActivityClass = !methodName.endsWith("View");
+        final boolean generateCodeForActivityClass = !generateCodeForViewClass;
 
         ClassName appCompatClass = ClassName.get("android.support.v7.app", "AppCompatActivity");
         ClassName viewClass = ClassName.get("android.view", "View");
@@ -107,13 +85,48 @@ public class FormPreprocessor extends BasePreprocessor {
         return new ArrayList<MethodSpec.Builder>() {{
             if(generateCodeForActivityClass)
                 add(getCommonFormCheckBuilder(methodName).
-                        addTypeVariable(TypeVariableName.get("T", appCompatClass)).
-                        addParameter(TypeVariableName.get("T"), "target"));
+                        addParameter(appCompatClass, "target"));
 
             if(generateCodeForViewClass)
                 add(getCommonFormCheckBuilder(methodName).
-                        addTypeVariable(TypeVariableName.get("T", viewClass)).
-                        addParameter(TypeVariableName.get("T"), "target"));
+                        addParameter(viewClass, "target"));
         }};
+    }
+
+    @Override
+    protected boolean onProcess(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv) {
+        filteredAnnotations.forEach(this::processFormNotEmpty);
+        return true;
+    }
+
+    @Override
+    protected Class[] getSupportedAnnotations() {
+        return new Class[] {FormNotEmpty.class};
+    }
+
+    @Override
+    protected boolean onProcessingOver(Map<Element, List<Element>> filteredAnnotations, Set<? extends TypeElement> originalAnnotations, RoundEnvironment roundEnv) {
+        List<MethodSpec> methods = new LinkedList<>();
+
+        getMethodBuffer().forEach((name, builderList) ->
+                builderList.forEach(methodBuilder -> methods.add(methodBuilder.addStatement("return true").build()))
+        );
+
+        TypeSpec formChecker = TypeSpec.classBuilder("FormChecker")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addMethods(methods)
+                .build();
+
+        JavaFile javaFile = JavaFile.builder(Environment.TargetAppPackage + ".generated", formChecker)
+                .addFileComment(getFileHeader())
+                .build();
+
+        try {
+            javaFile.writeTo(filer);
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex.toString());
+        }
+
+        return true;
     }
 }
