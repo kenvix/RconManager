@@ -60,7 +60,43 @@ public class FormPreprocessor extends BasePreprocessor {
                 FormNumberMoreOrEqual formNumberMoreOrEqual = annotatedElement.getAnnotation(FormNumberMoreOrEqual.class);
 
                 if(formNumberLess != null || formNumberLessOrEqual != null || formNumberMore != null || formNumberMoreOrEqual != null) {
+                    builders.forEach(builder -> builder
+                            .beginControlFlow("try")
+                            .addStatement("int number = Integer.parseInt($N.getText().toString())", fieldVarName));
 
+                    String lessConditionStatement = null;
+
+                    if(formNumberLess != null) {
+                        lessConditionStatement = "number >= " + formNumberLess.value();
+                    } else if(formNumberLessOrEqual != null) {
+                        lessConditionStatement = "number > " + formNumberLessOrEqual.value();
+                    }
+
+                    String moreConditionStatement = null;
+
+                    if(formNumberMore != null) {
+                        moreConditionStatement = "number <= " + formNumberMore.value();
+                    } else if(formNumberMoreOrEqual != null) {
+                        moreConditionStatement = "number < " + formNumberMoreOrEqual.value();
+                    }
+
+                    String conditionStatement;
+
+                    if(moreConditionStatement != null && lessConditionStatement != null)
+                        conditionStatement = lessConditionStatement + " || " + moreConditionStatement;
+                    else
+                        conditionStatement = lessConditionStatement == null ? moreConditionStatement : lessConditionStatement;
+
+                    builders.forEach(builder -> builder
+                            .beginControlFlow("if ($L)", conditionStatement)
+                            .addStatement("$N.setError($S) ", fieldVarName, "You can't let " + conditionStatement.replace("||", "or"))
+                            .addStatement("return false")
+                            .endControlFlow()
+                            .endControlFlow()
+                            .beginControlFlow("catch (Exception ex)")
+                            .addStatement("$N.setError($L) ", fieldVarName, "ex.getMessage()")
+                            .addStatement("return false")
+                            .endControlFlow());
                 }
             }
         });
