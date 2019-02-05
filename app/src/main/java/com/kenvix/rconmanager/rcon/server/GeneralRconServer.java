@@ -12,7 +12,7 @@ import java.net.URI;
 
 public class GeneralRconServer extends RconServer {
 
-    public GeneralRconServer(@NonNull String name, @NonNull String host, int port,  @NonNull String password) {
+    public GeneralRconServer(@NonNull String name, @NonNull String host, int port, @NonNull String password) {
         super(name, host, port, password);
     }
 

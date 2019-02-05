@@ -6,6 +6,8 @@
 package com.kenvix.rconmanager.ui.main;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.kenvix.rconmanager.R;
-import com.kenvix.rconmanager.database.dao.BaseModel;
+import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.server.GeneralRconServer;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
@@ -24,16 +26,16 @@ import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class MainActivity extends BaseActivity {
-    private final String tag = "mainActivity";
+    public static final int StartAddServerActivityRequestCode = 0xac00;
 
     @ViewAutoLoad public FloatingActionButton mainFab;
     @ViewAutoLoad public Toolbar mainToolbar;
     @ViewAutoLoad public RecyclerView mainServers;
 
     private ServerAdapter serverAdapter;
+    private ServerModel serverModel;
 
     private void initializeApplication() {
         IconManager.initialize(this);
@@ -44,18 +46,27 @@ public class MainActivity extends BaseActivity {
         initializeApplication();
 
         setSupportActionBar(mainToolbar);
-
-        List<RconServer> servers = new ArrayList<>();
-        IntStream.range(0, 10).forEach(i -> servers.add(new GeneralRconServer("fuck", "sadsadsa", 11, "saddsa")));
-
-        serverAdapter = new ServerAdapter(servers, this);
-        serverAdapter.initializeRecyclerView(getWindow().getDecorView());
+        loadServerRecyclerView();
 
         mainFab.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddServerActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, StartAddServerActivityRequestCode);
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(data != null && resultCode == RESULT_OK) {
+
+            if(requestCode == StartAddServerActivityRequestCode) {
+                if(data.getBooleanExtra(AddServerActivity.ParamRequestReload, false))
+                    loadServerRecyclerView();
+            }
+
+        }
     }
 
     @Override
@@ -83,5 +94,29 @@ public class MainActivity extends BaseActivity {
     @Override
     protected int getLayout() {
         return R.layout.activity_main;
+    }
+
+    private void loadServerRecyclerView() {
+        List<RconServer> servers = new ArrayList<>();
+        serverModel = new ServerModel(this);
+
+        try (Cursor serverCursor = serverModel.getAll()) {
+
+            while (serverCursor.moveToNext()) {
+                servers.add(new GeneralRconServer(
+                        serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldName)),
+                        serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldHost)),
+                        serverCursor.getInt(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPort)),
+                        serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPassword))
+                ));
+            }
+
+        } catch (Exception ex) {
+            makeSimpleToast(getString(R.string.error_unable_load_servers) + ex.getLocalizedMessage());
+            ex.printStackTrace();
+        }
+
+        serverAdapter = new ServerAdapter(servers, this);
+        serverAdapter.initializeRecyclerView(getWindow().getDecorView());
     }
 }

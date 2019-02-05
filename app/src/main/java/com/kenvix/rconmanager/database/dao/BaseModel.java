@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 
 import com.kenvix.rconmanager.database.GlobalDatabaseHelper;
 import com.kenvix.utils.ReflectTools;
@@ -37,8 +38,8 @@ public abstract class BaseModel {
         return getWritableDatabase().update(tableName, values, whereClause, whereArgs);
     }
 
-    Cursor select(String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
-        return getReadableDatabase().query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy);
+    Cursor select(String whereClause, String[] whereArgs, @Nullable String groupBy, @Nullable String having, @Nullable String orderBy, @Nullable String[] columns) {
+        return getReadableDatabase().query(tableName, columns, whereClause, whereArgs, groupBy, having, orderBy);
     }
 
     int delete(String whereClause, String[] whereArgs) {

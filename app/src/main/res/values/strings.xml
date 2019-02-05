@@ -1,5 +1,8 @@
 <resources>
-    <string name="prompt_cant_empty">此项不能为空</string>
+    <string name="error_operation_failed">操作失败：</string>
+    <string name="error_unable_load_servers">无法载入服务器列表，尝试清除应用数据可能有助于解决此问题：</string>
+    <string name="error_invalid_number_less_or_equal">数字不合法，应小于或等于 %d</string>
+    <string name="error_invalid_number_more_or_equal">数字不合法，应大于或等于 %d</string>
     <!-- Strings related to Server List -->
     <string name="app_name">MineCraft Rcon 管理工具</string>
     <string name="title_main">Rcon 服务器列表</string>
@@ -20,7 +23,7 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_field_required">此项不能为空</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
