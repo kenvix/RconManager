@@ -52,7 +52,7 @@ public class AddServerActivity extends BaseActivity {
 
     @Override
     @SuppressWarnings("SetTextI18n")
-    protected void initializeElements() {
+    protected void onInitialize() {
         editTargetId = getIntent().getIntExtra(ParamEditTargetId, -1);
 
         setSupportActionBar(addServerToolbar);

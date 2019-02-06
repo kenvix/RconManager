@@ -27,7 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getBaseLayout());
         Invoker.invokeViewAutoLoader(this);
 
-        initializeElements();
+        onInitialize();
     }
 
     public void toast(String text, int toastLength) {
@@ -108,7 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 });
     }
 
-    protected abstract void initializeElements();
+    protected abstract void onInitialize();
     protected abstract int getBaseLayout();
     protected abstract int getBaseContainer();
 }

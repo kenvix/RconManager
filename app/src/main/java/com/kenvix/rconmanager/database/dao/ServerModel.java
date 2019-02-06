@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 
-import com.kenvix.rconmanager.rcon.server.RconServer;
+import com.kenvix.rconmanager.rcon.meta.RconServer;
 
 public class ServerModel extends BaseModel {
     public static final String FieldSid  = "sid";

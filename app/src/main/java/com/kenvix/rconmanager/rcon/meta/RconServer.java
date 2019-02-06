@@ -3,7 +3,7 @@
 //
 // Licensed under GNU Affero General Public License v3.0
 
-package com.kenvix.rconmanager.rcon.server;
+package com.kenvix.rconmanager.rcon.meta;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,10 +15,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 public class RconServer implements Cloneable, Parcelable {
-    //private static final long serialVersionUID = 0xf00001L;
+    //private static final long serialVersionUID = 0xFA00001L;
 
     private int sid = -1;
     private String host;
@@ -134,5 +133,10 @@ public class RconServer implements Cloneable, Parcelable {
 
     public URL getRconURL() throws UnsupportedEncodingException, MalformedURLException {
         return new URL(getRconURLString());
+    }
+
+    @Override
+    public int hashCode() {
+        return 0xFA01 + name.hashCode() ^ host.hashCode() ^ password.hashCode() ^ port;
     }
 }

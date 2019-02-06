@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
-import com.kenvix.rconmanager.rcon.server.RconServer;
+import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
     private ServerModel serverModel;
 
     @Override
-    protected void initializeElements() {
+    protected void onInitialize() {
         ApplicationEnvironment.initializeApplication(this);
 
         setSupportActionBar(mainToolbar);

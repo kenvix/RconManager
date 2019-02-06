@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
-import com.kenvix.rconmanager.rcon.server.RconServer;
+import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.base.view.base.BaseHolder;

@@ -8,6 +8,10 @@ import com.kenvix.rconmanager.utils.Invoker;
 public final class ApplicationEnvironment {
     private static final int pausedResponseInterval = 50;
 
+    public static class NotificationChannelName {
+        public static String RconConnection = "rcon_connection";
+    }
+
     public static void initializeApplication(AppCompatActivity baseActivity) {
         if(Invoker.getBaseActivityInvocation() == null) {
             IconManager.initialize(baseActivity);

@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.kenvix.rconmanager.R;
-import com.kenvix.rconmanager.rcon.server.RconServer;
+import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.ui.base.view.base.BaseAdapter;
 
 import java.util.List;
