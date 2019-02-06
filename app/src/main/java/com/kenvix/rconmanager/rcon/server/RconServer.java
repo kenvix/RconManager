@@ -5,12 +5,21 @@
 
 package com.kenvix.rconmanager.rcon.server;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.io.IOException;
-import java.io.Serializable;
+import com.kenvix.utils.StringTools;
 
-public abstract class RconServer implements Cloneable, Serializable {
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+public class RconServer implements Cloneable, Parcelable {
+    //private static final long serialVersionUID = 0xf00001L;
+
     private int sid = -1;
     private String host;
     private String password;
@@ -26,6 +35,26 @@ public abstract class RconServer implements Cloneable, Serializable {
 
     public RconServer() {
     }
+
+    public RconServer(Parcel parcel) {
+        name = parcel.readString();
+        host = parcel.readString();
+        password = parcel.readString();
+        port = parcel.readInt();
+        sid = parcel.readInt();
+    }
+
+    public static final Creator<RconServer> CREATOR = new Creator<RconServer>() {
+        @Override
+        public RconServer createFromParcel(Parcel in) {
+            return new RconServer(in);
+        }
+
+        @Override
+        public RconServer[] newArray(int size) {
+            return new RconServer[size];
+        }
+    };
 
     public int getPort() {
         return port;
@@ -59,10 +88,6 @@ public abstract class RconServer implements Cloneable, Serializable {
         return host + ":" + port;
     }
 
-    public abstract void connect() throws IOException;
-    public abstract void disconnect();
-    public abstract void runCommand(String command) throws IOException;
-
     @Override
     public RconServer clone() throws CloneNotSupportedException {
        return (RconServer) super.clone();
@@ -82,5 +107,32 @@ public abstract class RconServer implements Cloneable, Serializable {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+
+    /**
+     * override this method with CONTENTS_FILE_DESCRIPTOR if sub class has file descriptor
+     * @return
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(host);
+        dest.writeString(password);
+        dest.writeInt(port);
+        dest.writeInt(sid);
+    }
+
+    public String getRconURLString() throws UnsupportedEncodingException {
+        return StringTools.format("rcon://%s@%s:%d#%s", URLEncoder.encode(password, "utf-8"), host, port, URLEncoder.encode(name, "utf-8"));
+    }
+
+    public URL getRconURL() throws UnsupportedEncodingException, MalformedURLException {
+        return new URL(getRconURLString());
     }
 }

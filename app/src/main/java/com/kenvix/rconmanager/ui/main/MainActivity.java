@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
-import com.kenvix.rconmanager.rcon.server.GeneralRconServer;
 import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
@@ -116,7 +115,7 @@ public class MainActivity extends BaseActivity {
         try (Cursor serverCursor = serverModel.getAll()) {
 
             while (serverCursor.moveToNext()) {
-                servers.add(new GeneralRconServer(
+                servers.add(new RconServer(
                         serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldName)),
                         serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldHost)),
                         serverCursor.getInt(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPort)),

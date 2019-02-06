@@ -5,32 +5,30 @@
 
 package com.kenvix.rconmanager.rcon.server;
 
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
-import java.net.URI;
 
-public class GeneralRconServer extends RconServer {
+public class RconConnect {
+    RconServer rconServer;
 
-    public GeneralRconServer(@NonNull String name, @NonNull String host, int port, @NonNull String password) {
-        super(name, host, port, password);
+    public RconConnect(RconServer rconServer) {
+        this.rconServer = rconServer;
     }
 
-    public GeneralRconServer() {
-    }
 
-    @Override
     public void connect() throws IOException {
 
     }
 
-    @Override
     public void disconnect() {
 
     }
 
-    @Override
     public void runCommand(String command) throws IOException {
 
     }
+
+
 }

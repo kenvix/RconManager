@@ -5,11 +5,9 @@
 
 package com.kenvix.rconmanager.ui.main.view.servers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,8 +19,8 @@ import com.kenvix.rconmanager.rcon.server.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.ui.base.view.base.BaseHolder;
+import com.kenvix.rconmanager.ui.connection.ConnectionActivity;
 import com.kenvix.rconmanager.ui.main.MainActivity;
-import com.kenvix.rconmanager.utils.Invoker;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreateContextMenuListener {
@@ -45,7 +43,11 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         serverAddress.setText(server.getHostAndPort());
 
         serverItem.setOnClickListener(view -> {
+            MainActivity activity = (MainActivity) getActivityByView(view);
 
+            Intent intent = new Intent(activity, ConnectionActivity.class);
+            intent.putExtra(ConnectionActivity.ExtraRconServer, rconServer);
+            activity.startActivity(intent);
         });
     }
 

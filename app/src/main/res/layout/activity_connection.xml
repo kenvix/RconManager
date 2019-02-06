@@ -17,11 +17,9 @@
             android:id="@+id/connection_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_arrow_back"
             app:title="ServerName @ Host"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
-        </android.support.v7.widget.Toolbar>
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -47,15 +45,17 @@
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_history"
-                    android:text="命令历史"
+                    android:id="@+id/connection_command_history"
+                    android:drawableStart="@drawable/ic_history"
+                    android:text="@string/action_command_history"
                     android:layout_height="match_parent" />
 
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_storage_list"
-                    android:text="快速命令"
+                    android:id="@+id/connection_quick_command"
+                    android:drawableEnd="@drawable/ic_storage_list"
+                    android:text="@string/action_quick_command"
                     android:layout_height="match_parent" />
             </LinearLayout>
 
@@ -65,9 +65,9 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/connection_port"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/connection_command_text"
                     android:autofillHints="@string/prompt_command"
                     android:hint="@string/prompt_command"
                     android:imeActionId="6"
@@ -86,23 +86,26 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="-"
-                    android:drawableLeft="@drawable/ic_left"
+                    android:layout_weight="2"
+                    android:id="@+id/connection_command_prev"
+                    android:text="@string/action_prev"
+                    android:drawableStart="@drawable/ic_left"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:id="@+id/connection_command_run"
+                    android:drawableStart="@drawable/ic_run"
+                    android:text="@string/action_run"
                     android:layout_height="match_parent" />
 
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:drawableLeft="@drawable/ic_run"
-                    android:text="运行"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="+"
-                    android:drawableRight="@drawable/ic_right"
+                    android:id="@+id/connection_command_next"
+                    android:text="@string/action_next"
+                    android:drawableEnd="@drawable/ic_right"
                     android:layout_height="match_parent" />
             </LinearLayout>
         </LinearLayout>
@@ -113,6 +116,7 @@
 
             <TextView
                 android:layout_width="match_parent"
+                android:id="@+id/connection_command_area"
                 android:layout_height="match_parent"
                 android:text="COMMAND RESULT AREA"/>
         </LinearLayout>

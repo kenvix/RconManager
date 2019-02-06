@@ -9,6 +9,8 @@ import android.view.View;
 import com.kenvix.rconmanager.R;
 import com.kenvix.utils.PreprocessorName;
 
+import java.lang.reflect.InvocationTargetException;
+
 public final class Invoker {
     private static AppCompatActivity baseActivityInvocation = null;
     private final static ClassLoader classLoader = Invoker.class.getClassLoader();
@@ -31,8 +33,11 @@ public final class Invoker {
                     .invoke(null, targetRaw);
         } catch (NoSuchMethodException ex) {
             Log.w("Invoker for Activity", "Invoker can't detect loader method, may cause NullPointerException: " + ex.getMessage());
+        } catch (InvocationTargetException ex) {
+            Log.e("Invoker for Activity", "Target Loader throws a unexpected exception: " + ex.getMessage());
+            ex.printStackTrace();
         } catch (Exception ex) {
-            Log.e("Invoker for Activity", "No such view auto loader generated: " + ex.getMessage());
+            Log.e("Invoker for Activity", "No such view auto loader generated: " + targetRaw.getClass().getCanonicalName() + " : " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -42,9 +47,12 @@ public final class Invoker {
             viewToolset.getMethod(PreprocessorName.getViewAutoLoaderMethodName(targetRaw.getClass().getCanonicalName()), Object.class, View.class)
                     .invoke(null, targetRaw, targetView);
         } catch (NoSuchMethodException ex) {
-            Log.w("Invoker for Activity", "Invoker can't detect loader method, may cause NullPointerException: " + ex.getMessage());
+            Log.w("Invoker for View", "Invoker can't detect loader method, may cause NullPointerException: " + ex.getMessage());
+        } catch (InvocationTargetException ex) {
+            Log.e("Invoker for View", "Target Loader throws a unexpected exception: " + ex.getMessage());
+            ex.printStackTrace();
         } catch (Exception ex) {
-            Log.e("Invoker for View", "No such view auto loader generated: " + ex.getMessage());
+            Log.e("Invoker for View", "No such view auto loader generated: " + targetRaw.getClass().getCanonicalName() + " : " + ex.getMessage());
             ex.printStackTrace();
         }
     }

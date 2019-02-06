@@ -39,4 +39,15 @@
     <string name="text_share_server">Rcon Server Information\nName: %s\nHost: %s\nPort number: %d\nPassword: %s</string>
     <string name="prompt_share_server">Share server information (Notice: Including Rcon server password)</string>
     <string name="prompt_command">Command</string>
+    <string name="action_run">Run</string>
+    <string name="action_command_history">Command history</string>
+    <string name="action_quick_command">Quick commands</string>
+    <string name="action_prev">Prev</string>
+    <string name="action_next">Next</string>
+    <string name="action_connection_info">Connection Info</string>
+    <string name="action_clean_command_area">Clean command result</string>
+    <string name="action_exit">Exit</string>
+    <string name="action_clean_history">Clean command history</string>
+    <string name="action_back">Back</string>
+    <string name="prompt_connectied_to">"Connected to "</string>
 </resources>

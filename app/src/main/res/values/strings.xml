@@ -44,4 +44,15 @@
     <string name="text_share_server">Rcon 服务器信息\n名称：%s\n地址：%s\n端口号：%d\n密码：%s</string>
     <string name="prompt_share_server">分享服务器信息 （注意：Rcon 服务器密码也会被分享）</string>
     <string name="prompt_command">命令</string>
+    <string name="action_run">运行</string>
+    <string name="action_command_history">命令历史</string>
+    <string name="action_quick_command">快速命令</string>
+    <string name="action_prev">上一个</string>
+    <string name="action_next">下一个</string>
+    <string name="action_connection_info">连接信息</string>
+    <string name="action_clean_command_area">清空命令结果</string>
+    <string name="action_exit">退出</string>
+    <string name="action_clean_history">清空命令历史</string>
+    <string name="action_back">返回</string>
+    <string name="prompt_connectied_to">已连接</string>
 </resources>

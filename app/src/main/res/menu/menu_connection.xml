@@ -1,0 +1,34 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.connection.ConnectionActivity">
+    <item
+        android:id="@+id/connection_connection_info"
+        android:orderInCategory="100"
+        android:title="@string/action_connection_info"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/connection_clean_command_area"
+        android:orderInCategory="100"
+        android:title="@string/action_clean_command_area"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/connection_clean_command_history"
+        android:orderInCategory="100"
+        android:title="@string/action_clean_history"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/connection_back"
+        android:orderInCategory="100"
+        android:title="@string/action_back"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/connection_exit"
+        android:orderInCategory="100"
+        android:title="@string/action_exit"
+        app:showAsAction="never" />
+</menu>
