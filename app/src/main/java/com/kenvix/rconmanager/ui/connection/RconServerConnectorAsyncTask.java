@@ -6,16 +6,18 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.rcon.exception.IllegalAuthorizationException;
 import com.kenvix.rconmanager.rcon.protocol.RconConnect;
+import com.kenvix.rconmanager.ui.base.BaseAsyncTask;
 
 import java.lang.ref.WeakReference;
 
-class RconServerConnector extends AsyncTask<Void, Void, RconConnect> {
+class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect> {
     private ProgressDialog progressDialog;
-    private RuntimeException exception = null;
+
     private WeakReference<ConnectionActivity> activityWeakReference;
 
-    RconServerConnector(ConnectionActivity activity) {
+    RconServerConnectorAsyncTask(ConnectionActivity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
@@ -26,7 +28,7 @@ class RconServerConnector extends AsyncTask<Void, Void, RconConnect> {
         try {
             connect.connect();
         } catch (RuntimeException ex) {
-            exception = ex;
+            setException(ex);
         }
 
         return connect;
@@ -56,18 +58,24 @@ class RconServerConnector extends AsyncTask<Void, Void, RconConnect> {
             progressDialog.dismiss();
 
         if(getException() != null) {
-            activity.alertDialog(activity.getString(R.string.prompt_connection_failed, activity.getRconServer().getHostAndPort(), getException().toString()), result -> exitForError());
+            String detail;
+
+            if(getException() instanceof IllegalAuthorizationException) {
+                detail = activity.getString(R.string.error_incorrect_password);
+            } else {
+                detail = getException().toString();
+            }
+
+            activity.alertDialog(activity.getString(R.string.prompt_connection_failed, activity.getRconServer().getHostAndPort(), detail), result -> exitForError());
         }
+
+        activity.onRconConnectionEstablished();
     }
 
     @Override
     protected void onCancelled() {
         super.onCancelled();
         exitForError();
-    }
-
-    public RuntimeException getException() {
-        return exception;
     }
 
     private void exitForError() {

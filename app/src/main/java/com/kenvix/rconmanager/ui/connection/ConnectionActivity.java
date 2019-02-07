@@ -3,11 +3,8 @@ package com.kenvix.rconmanager.ui.connection;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,16 +19,13 @@ import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
-import com.kenvix.utils.CommonTools;
 import com.kenvix.utils.annotation.ViewAutoLoad;
-
-import java.lang.ref.WeakReference;
 
 public class ConnectionActivity extends BaseActivity {
     public static final String ExtraRconServer = "rcon_server";
     private RconServer rconServer;
     private RconConnect rconConnect = null;
-    private RconServerConnector rconServerConnector;
+    private RconServerConnectorAsyncTask rconServerConnectorAsyncTask;
 
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
@@ -46,6 +40,7 @@ public class ConnectionActivity extends BaseActivity {
     protected void onInitialize() {
 
         try {
+
             Intent intent = getIntent();
             rconServer = intent.getParcelableExtra(ExtraRconServer);
 
@@ -55,15 +50,23 @@ public class ConnectionActivity extends BaseActivity {
             connectionToolbar.setTitle(rconServer.getName());
 
             setSupportActionBar(connectionToolbar);
+            connectionCommandArea.setText("");
+            connectionCommandRun.setEnabled(false);
 
-            rconServerConnector = new RconServerConnector(this);
-            rconServerConnector.execute();
+            rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
+            rconServerConnectorAsyncTask.execute();
+
+
 
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
             //setResult(RESULT_CANCELED);
             finish();
         }
+    }
+
+    public void onRconConnectionEstablished() {
+        connectionCommandRun.setEnabled(true);
     }
 
     @Override
@@ -125,12 +128,6 @@ public class ConnectionActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        try {
-            rconServerConnector.cancel(true);
-        } catch (Exception ex) {
-            Log.w("Connection Activity", "Force stop connector failed.");
-            ex.printStackTrace();
-        }
         super.onDestroy();
     }
 
@@ -175,5 +172,13 @@ public class ConnectionActivity extends BaseActivity {
 
         notificationManager.notify(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode, notification);
         return notifyCode;
+    }
+
+    public void appendCommandEcho(String command) {
+
+    }
+
+    public void appendCommandResult(String command) {
+
     }
 }

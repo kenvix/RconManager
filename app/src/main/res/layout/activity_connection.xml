@@ -43,20 +43,22 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:id="@+id/connection_command_history"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:drawableStart="@drawable/ic_history"
-                    android:text="@string/action_command_history"
-                    android:layout_height="match_parent" />
+                    android:text="@string/action_command_history" />
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:id="@+id/connection_quick_command"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:drawableEnd="@drawable/ic_storage_list"
-                    android:text="@string/action_quick_command"
-                    android:layout_height="match_parent" />
+                    android:text="@string/action_quick_command" />
             </LinearLayout>
 
             <LinearLayout
@@ -85,28 +87,30 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:id="@+id/connection_command_prev"
-                    android:text="@string/action_prev"
-                    android:drawableStart="@drawable/ic_left"
-                    android:layout_height="match_parent" />
-
-                <Button
+                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="0dp"
-                    android:layout_weight="5"
-                    android:id="@+id/connection_command_run"
-                    android:drawableStart="@drawable/ic_run"
-                    android:text="@string/action_run"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:drawableStart="@drawable/ic_left"
+                    android:text="@string/action_prev" />
+
+                <Button
+                    android:id="@+id/connection_command_run"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:text="@string/action_run" />
+
+                <Button
                     android:id="@+id/connection_command_next"
-                    android:text="@string/action_next"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:drawableEnd="@drawable/ic_right"
-                    android:layout_height="match_parent" />
+                    android:text="@string/action_next" />
             </LinearLayout>
         </LinearLayout>
 

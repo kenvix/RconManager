@@ -21,13 +21,15 @@ import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
+import com.kenvix.rconmanager.ui.setting.SettingActivity;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-    public static final int StartAddServerActivityRequestCode = 0xac00;
+    public static final int ActivityRequestCode = 0xac02;
+
     public static final String ExtraPromptText = "prompt_text";
     public static final String ExtraRequestReload = "request_reload";
 
@@ -44,10 +46,7 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(mainToolbar);
 
-        mainFab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, AddServerActivity.class);
-            startActivityForResult(intent, StartAddServerActivityRequestCode);
-        });
+        mainFab.setOnClickListener(view -> AddServerActivity.startActivity(this));
     }
 
     @Override
@@ -62,7 +61,7 @@ public class MainActivity extends BaseActivity {
 
         if(data != null && resultCode == RESULT_OK) {
 
-            if(requestCode == StartAddServerActivityRequestCode) {
+            if(requestCode == AddServerActivity.ActivityRequestCode) {
                 if(data.getBooleanExtra(AddServerActivity.ParamRequestReload, false))
                     reloadServerRecyclerView();
             }
@@ -89,6 +88,7 @@ public class MainActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.main_action_settings) {
+            SettingActivity.startActivity(this);
             return true;
         } else if(id == R.id.main_action_refresh) {
             reloadServerRecyclerView();

@@ -1,12 +1,10 @@
 apply plugin: 'java-library'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.squareup:javapoet:1.8.0'
-// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
-    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
-
-
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+    compile 'org.apache.commons:commons-collections4:4.1'
     //implementation 'com.google.auto.service:auto-service:1.0-rc2'
 }
 

@@ -3,7 +3,7 @@
 //
 // Licensed under GNU Affero General Public License v3.0
 
-package com.kenvix.rconmanager.ui.base.fragment;
+package com.kenvix.rconmanager.ui.base;
 
 import android.support.v4.app.Fragment;
 

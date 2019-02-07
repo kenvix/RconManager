@@ -52,4 +52,5 @@
     <string name="prompt_connectied_to">"Connected to "</string>
     <string name="prompt_connecting">Connecting to %s\n%s</string>
     <string name="prompt_connection_failed">Failed to connect %s\n\n%s</string>
+    <string name="command_result_area">COMMAND RESULT AREA</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.kenvix.rconmanager.ui.addserver;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +22,7 @@ import com.kenvix.utils.annotation.form.FormNumberLessOrEqual;
 import com.kenvix.utils.annotation.form.FormNumberMoreOrEqual;
 
 public class AddServerActivity extends BaseActivity {
+    public static final int ActivityRequestCode = 0xac00;
     public static final String ParamEditTargetId = "edit_target_id";
     public static final String ParamRequestReload = "request_reload";
 
@@ -129,12 +132,12 @@ public class AddServerActivity extends BaseActivity {
                 serverModel.updateBySid(editTargetId, addServerName.getText().toString(),
                         addServerHost.getText().toString(),
                         Integer.parseInt(addServerPort.getText().toString()),
-                        addServerPort.getText().toString());
+                        addServerPassword.getText().toString());
             } else {
                 serverModel.add(addServerName.getText().toString(),
                         addServerHost.getText().toString(),
                         Integer.parseInt(addServerPort.getText().toString()),
-                        addServerPort.getText().toString());
+                        addServerPassword.getText().toString());
             }
 
             Intent intent = new Intent();
@@ -145,5 +148,16 @@ public class AddServerActivity extends BaseActivity {
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
         }
+    }
+
+    public static void startActivity(Activity activity) {
+        Intent intent = new Intent(activity, AddServerActivity.class);
+        activity.startActivityForResult(intent, ActivityRequestCode);
+    }
+
+    public static void startActivity(Activity activity, int editTargetId) {
+        Intent intent = new Intent(activity, AddServerActivity.class);
+        intent.putExtra(AddServerActivity.ParamEditTargetId, editTargetId);
+        activity.startActivityForResult(intent, ActivityRequestCode);
     }
 }

@@ -87,9 +87,7 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         });
 
         menu.findItem(R.id.action_server_item_edit).setOnMenuItemClickListener(view -> {
-            Intent intent = new Intent(activity, AddServerActivity.class);
-            intent.putExtra(AddServerActivity.ParamEditTargetId, rconServer.getSid());
-            activity.startActivityForResult(intent, MainActivity.StartAddServerActivityRequestCode);
+            AddServerActivity.startActivity(activity, rconServer.getSid());
             return true;
         });
 
