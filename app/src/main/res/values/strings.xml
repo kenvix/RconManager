@@ -21,7 +21,7 @@
     <string name="text_add_server_edit_mode">编辑模式 / 正在编辑服务器：</string>
     <string name="prompt_name">服务器名称 (任意命名)</string>
     <string name="prompt_host">服务器地址</string>
-    <string name="prompt_port">Rcon 端口</string>
+    <string name="prompt_port">Rcon 端口 [通常为 25575 或 27015]</string>
     <string name="prompt_password">Rcon 密码 (可选)</string>
     <string name="prompt_invalid_port">端口号不合法 (应介于 1~65535)</string>
     <string name="action_add_server">保存服务器</string>
@@ -55,4 +55,6 @@
     <string name="action_clean_history">清空命令历史</string>
     <string name="action_back">返回</string>
     <string name="prompt_connectied_to">已连接</string>
+    <string name="prompt_connecting">正在连接到 %s\n%s</string>
+    <string name="prompt_connection_failed">连接 %s 失败\n\n%s</string>
 </resources>

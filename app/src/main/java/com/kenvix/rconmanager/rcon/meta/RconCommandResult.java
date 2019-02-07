@@ -12,16 +12,10 @@ public class RconCommandResult {
     private String command;
     @NonNull
     private String result;
-    private int ping;
 
-    public RconCommandResult(@NonNull String command, @NonNull String result, int ping) {
+    public RconCommandResult(@NonNull String command, @NonNull String result) {
         this.command = command;
-        this.ping = ping;
         this.result = result;
-    }
-
-    public int getPing() {
-        return ping;
     }
 
     @NonNull

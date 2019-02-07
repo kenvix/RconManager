@@ -9,33 +9,35 @@ import com.kenvix.rconmanager.rcon.meta.RconServer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RconConnectionService extends Service {
-    public static final String ExtraRconServer = "rcon_server";
+    public static final String ExtraRconConnect = "rcon_connect";
 
     private Map<RconServer, RconConnect> connectPool;
-    private Map<RconServer, Thread> threadPool;
+    private ExecutorService threadPool;
 
     @Override
     public void onCreate() {
         super.onCreate();
         connectPool = new HashMap<>();
-        threadPool = new HashMap<>();
+        threadPool = Executors.newCachedThreadPool();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        RconServer rconServer = intent.getParcelableExtra(ExtraRconServer);
+        RconConnect rconConnect = intent.getParcelableExtra(ExtraRconConnect);
 
-        if(rconServer == null)
-            throw new IllegalArgumentException("ExtraRconServer CAN'T be null");
+        if(rconConnect == null)
+            throw new IllegalArgumentException("ExtraRconConnect CAN'T be null");
+        if(rconConnect.getStatus() != RconConnect.Status.Connected || rconConnect.getStatus() != RconConnect.Status.Working)
+            throw new IllegalArgumentException("RconConnect MUST be connected or working");
 
-        if(!connectPool.containsKey(rconServer)) {
-            RconConnect connect = new RconConnect(rconServer);
+        RconServer rconServer = rconConnect.getRconServer();
 
-            connectPool.put(rconServer, connect);
-            threadPool.put(rconServer, new Thread(connect::connect));
-        }
+        if(!connectPool.containsKey(rconServer))
+            connectPool.put(rconServer, rconConnect);
 
         return super.onStartCommand(intent, flags, startId);
     }

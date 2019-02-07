@@ -89,6 +89,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public AlertDialog.Builder getAlertBuilder(String text, @Nullable String title, @Nullable Consumer<Boolean> callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage(text)
+                .setOnCancelListener(dialog -> {
+                    if(callback != null)
+                        callback.accept(false);
+                })
                 .setPositiveButton(getString(R.string.action_ok), (dialog, which) -> {
                     if (callback != null)
                         callback.accept(true);

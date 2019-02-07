@@ -3,8 +3,11 @@ package com.kenvix.rconmanager.ui.connection;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,12 +20,18 @@ import android.widget.TextView;
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
+import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
+import com.kenvix.utils.CommonTools;
 import com.kenvix.utils.annotation.ViewAutoLoad;
+
+import java.lang.ref.WeakReference;
 
 public class ConnectionActivity extends BaseActivity {
     public static final String ExtraRconServer = "rcon_server";
     private RconServer rconServer;
+    private RconConnect rconConnect = null;
+    private RconServerConnector rconServerConnector;
 
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
@@ -46,6 +55,10 @@ public class ConnectionActivity extends BaseActivity {
             connectionToolbar.setTitle(rconServer.getName());
 
             setSupportActionBar(connectionToolbar);
+
+            rconServerConnector = new RconServerConnector(this);
+            rconServerConnector.execute();
+
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
             //setResult(RESULT_CANCELED);
@@ -57,38 +70,21 @@ public class ConnectionActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        int notifyCode = rconServer.hashCode();
-
-        Intent openActivityIntent = new Intent(this, ConnectionActivity.class);
-        openActivityIntent.putExtra(ExtraRconServer, rconServer);
-        PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-
-        Notification notification = new NotificationCompat.Builder(this, ApplicationEnvironment.NotificationChannelName.RconConnection)
-                .setContentTitle(getString(R.string.prompt_connectied_to) + rconServer.getName())
-                .setContentText(rconServer.getHostAndPort())
-                .setContentIntent(openActivityPendingIntent)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setSmallIcon(R.drawable.ic_server_3)
-                .setWhen(System.currentTimeMillis())
-                .build();
-
-        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
-
-        notificationManager.notify(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode, notification);
-        Log.d("Rcon Connection", "Frontend paused, hashcode: " + notifyCode);
+        if(rconConnect != null) {
+            int notifyCode = makeConnectionNotification();
+            Log.d("Rcon Connection", "Frontend paused, hashcode: " + notifyCode);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        int notifyCode = rconServer.hashCode();
-
-        Log.d("Rcon Connection", "Frontend started, hashcode: " + notifyCode);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode);
+        if(rconConnect != null) {
+            int notifyCode = rconServer.hashCode();
+            Log.d("Rcon Connection", "Frontend started, hashcode: " + notifyCode);
+            cleanConnectionNotification(notifyCode);
+        }
     }
 
 
@@ -127,6 +123,16 @@ public class ConnectionActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        try {
+            rconServerConnector.cancel(true);
+        } catch (Exception ex) {
+            Log.w("Connection Activity", "Force stop connector failed.");
+            ex.printStackTrace();
+        }
+        super.onDestroy();
+    }
 
     @Override
     protected int getBaseLayout() {
@@ -135,6 +141,39 @@ public class ConnectionActivity extends BaseActivity {
 
     @Override
     protected int getBaseContainer() {
-        return 0;
+        return R.id.connection_container;
+    }
+
+    public RconServer getRconServer() {
+        return rconServer;
+    }
+
+    private void cleanConnectionNotification(int notifyCode) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode);
+    }
+
+    private int makeConnectionNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        int notifyCode = rconServer.hashCode();
+
+        Intent openActivityIntent = new Intent(this, ConnectionActivity.class);
+        openActivityIntent.putExtra(ExtraRconServer, rconServer);
+        PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+
+        Notification notification = new NotificationCompat.Builder(this, ApplicationEnvironment.NotificationChannelName.RconConnection)
+                .setContentTitle(getString(R.string.prompt_connectied_to) + rconServer.getName())
+                .setContentText(rconServer.getHostAndPort())
+                .setContentIntent(openActivityPendingIntent)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setSmallIcon(R.drawable.ic_server_3)
+                .setWhen(System.currentTimeMillis())
+                .build();
+
+        notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+        notificationManager.notify(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode, notification);
+        return notifyCode;
     }
 }

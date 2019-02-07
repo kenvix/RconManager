@@ -21,7 +21,7 @@
     <string name="text_add_server_edit_mode">"Editor mode / Editing server: "</string>
     <string name="prompt_name">Server name</string>
     <string name="prompt_host">Server host</string>
-    <string name="prompt_port">Rcon port</string>
+    <string name="prompt_port">Rcon port [usual 25575 or 27015]</string>
     <string name="prompt_password">Rcon password (optional)</string>
     <string name="prompt_invalid_port">Illegal port number (should be 1~65535)</string>
     <string name="action_add_server">Save server</string>
@@ -50,4 +50,6 @@
     <string name="action_clean_history">Clean command history</string>
     <string name="action_back">Back</string>
     <string name="prompt_connectied_to">"Connected to "</string>
+    <string name="prompt_connecting">Connecting to %s\n%s</string>
+    <string name="prompt_connection_failed">Failed to connect %s\n\n%s</string>
 </resources>
