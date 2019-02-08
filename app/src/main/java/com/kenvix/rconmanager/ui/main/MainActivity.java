@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.R;

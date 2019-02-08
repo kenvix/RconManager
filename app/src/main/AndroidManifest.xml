@@ -13,17 +13,26 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.setting.SettingActivity"
-            android:label="@string/title_activity_setting"></activity>
-        <activity
-            android:name=".ui.setting.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_setting" />
 
         <service
             android:name=".service.RconConnectionService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.connection.ConnectionActivity" />
+        <activity
+            android:name=".ui.connection.ConnectionActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:label="@string/title_connection">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="rcon" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.addserver.AddServerActivity"
             android:label="@string/title_activity_add_server" />

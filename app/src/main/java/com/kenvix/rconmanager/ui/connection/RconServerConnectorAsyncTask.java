@@ -57,6 +57,9 @@ class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect
         if(progressDialog.isShowing())
             progressDialog.dismiss();
 
+        if(rconConnect == null)
+            setException(new IllegalStateException("Illegal RconConnect State <null>"));
+
         if(getException() != null) {
             String detail;
 
@@ -69,7 +72,7 @@ class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect
             activity.alertDialog(activity.getString(R.string.prompt_connection_failed, activity.getRconServer().getHostAndPort(), detail), result -> exitForError());
         }
 
-        activity.onRconConnectionEstablished();
+        activity.onRconConnectionEstablished(rconConnect);
     }
 
     @Override

@@ -45,10 +45,11 @@ public abstract class BaseAdapter<T extends BaseHolder, U> extends RecyclerView.
         return context;
     }
 
-    public void initializeRecyclerView(View view) {
+    public RecyclerView initializeRecyclerView(View view) {
         recyclerView = view.findViewById(getRecyclerViewControlId());
         recyclerView.setLayoutManager(getLayoutManager());
         recyclerView.setAdapter(this);
+        return recyclerView;
     }
 
     @Override

@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <android.support.v7.preference.PreferenceCategory
-        android:title="Category 1">
+    <PreferenceCategory
+        android:title="@string/title_terminal">
 
-        <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="key1"
-            android:title="Switch Preference"
-            android:summary="Switch Summary"
-            android:defaultValue="true" />
+        <EditTextPreference
+            android:key="command_prompt"
+            android:title="@string/title_command_prompt"
+            android:summary="@string/desc_command_prompt"
+            android:dialogMessage=""
+            android:defaultValue="λ > " />
 
-        <android.support.v7.preference.EditTextPreference
-            android:key="key2"
-            android:title="EditText Preference"
-            android:summary="EditText Summary"
-            android:dialogMessage="Dialog Message"
-            android:defaultValue="Default value" />
-        <android.support.v7.preference.CheckBoxPreference
-            android:key="key3"
-            android:title="CheckBox Preference"
-            android:summary="CheckBox Summary"
+        <CheckBoxPreference
+            android:key="auto_start"
+            android:title="@string/title_auto_start"
+            android:summary="@string/desc_auto_start"
             android:defaultValue="true"/>
-    </android.support.v7.preference.PreferenceCategory>
+
+    </PreferenceCategory>
 </PreferenceScreen>

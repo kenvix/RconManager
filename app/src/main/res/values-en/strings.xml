@@ -52,5 +52,12 @@
     <string name="prompt_connectied_to">"Connected to "</string>
     <string name="prompt_connecting">Connecting to %s\n%s</string>
     <string name="prompt_connection_failed">Failed to connect %s\n\n%s</string>
+    <string name="title_about">About</string>
+    <string name="title_terminal">Terminal</string>
+    <string name="title_command_prompt">Command prompt</string>
+    <string name="title_auto_start">Auto connect rcon:// server</string>
+    <string name="desc_auto_start">When rcon:// links are clicked, automatically connect and show terminal.</string>
+    <string name="desc_command_prompt">Displayed at terminal</string>
+    <string name="title_connection">Rcon connection</string>
     <string name="command_result_area">COMMAND RESULT AREA</string>
 </resources>

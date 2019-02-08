@@ -1,31 +1,48 @@
 package com.kenvix.rconmanager.ui.connection;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.method.ScrollingMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
+import com.kenvix.rconmanager.DefaultPreferences;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConnectionActivity extends BaseActivity {
     public static final String ExtraRconServer = "rcon_server";
+    public static final String ExtraPreFilledCommandText = "rcon_prefill_command";
+    public static final String ExtraPreFilledCommandResultAreaText = "rcon_prefill_result_area";
+
     private RconServer rconServer;
     private RconConnect rconConnect = null;
-    private RconServerConnectorAsyncTask rconServerConnectorAsyncTask;
+    private List<String> commandHistory = new ArrayList<>();
 
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
@@ -35,10 +52,11 @@ public class ConnectionActivity extends BaseActivity {
     @ViewAutoLoad public TextView connectionCommandArea;
     @ViewAutoLoad public EditText connectionCommandText;
     @ViewAutoLoad public Toolbar connectionToolbar;
+    @ViewAutoLoad public ScrollView connectionScroll;
+    @ViewAutoLoad public LinearLayout connectionCommandLayout;
 
     @Override
     protected void onInitialize() {
-
         try {
 
             Intent intent = getIntent();
@@ -48,15 +66,34 @@ public class ConnectionActivity extends BaseActivity {
                 throw new IllegalArgumentException("ExtraRconServer CAN'T be null");
 
             connectionToolbar.setTitle(rconServer.getName());
-
             setSupportActionBar(connectionToolbar);
+
+            String preFilledCommandText = intent.getStringExtra(ExtraPreFilledCommandText);
+            if(preFilledCommandText != null)
+                connectionCommandText.setText(preFilledCommandText);
+
+            String preFilledCommandResultAreaText = intent.getStringExtra(ExtraPreFilledCommandResultAreaText);
+            if(preFilledCommandResultAreaText != null) {
+                connectionCommandArea.setText(preFilledCommandResultAreaText);
+                scrollCommandAreaToBottom();
+                Log.d("Connection Activity","rescued activity from intent");
+            }
+
             connectionCommandArea.setText("");
-            connectionCommandRun.setEnabled(false);
+            connectionCommandText.setImeActionLabel(getString(R.string.action_run), KeyEvent.KEYCODE_ENTER);
+            connectionCommandText.setOnKeyListener((view, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    connectionCommandRun.performClick();
+                    connectionCommandText.requestFocus();
+                    return true;
+                }
+                return false;
+            });
 
-            rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
+            connectionScroll.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> scrollCommandAreaToBottom());
+
+            RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
             rconServerConnectorAsyncTask.execute();
-
-
 
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
@@ -65,7 +102,8 @@ public class ConnectionActivity extends BaseActivity {
         }
     }
 
-    public void onRconConnectionEstablished() {
+    public void onRconConnectionEstablished(RconConnect connect) {
+        rconConnect = connect;
         connectionCommandRun.setEnabled(true);
     }
 
@@ -156,6 +194,10 @@ public class ConnectionActivity extends BaseActivity {
 
         Intent openActivityIntent = new Intent(this, ConnectionActivity.class);
         openActivityIntent.putExtra(ExtraRconServer, rconServer);
+        openActivityIntent.putExtra(ExtraPreFilledCommandText, connectionCommandText.getText().toString());
+        openActivityIntent.putExtra(ExtraPreFilledCommandResultAreaText, connectionCommandArea.getText().toString());
+        openActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
         PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
@@ -174,11 +216,53 @@ public class ConnectionActivity extends BaseActivity {
         return notifyCode;
     }
 
-    public void appendCommandEcho(String command) {
+    public SpannableStringBuilder getCommandPrompt() {
+        String commandPromptString = getPreferences().getString(DefaultPreferences.KeyCommandPrompt, DefaultPreferences.DefaultCommandPrompt);
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(commandPromptString);
+        ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(R.color.colorPrimaryDark));
 
+        spannableStringBuilder.setSpan(colorPrimaryDark, 0, commandPromptString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableStringBuilder;
     }
 
-    public void appendCommandResult(String command) {
 
+    public void onRunButtonClick(View view) {
+        String commandText = connectionCommandText.getText().toString();
+
+        if(!commandText.isEmpty()) {
+            RconCommanderAsyncTask rconCommanderAsyncTask = new RconCommanderAsyncTask(rconConnect, this);
+            appendCommandEcho(commandText);
+            pushCommandHistory(commandText);
+            rconCommanderAsyncTask.execute(commandText);
+            connectionCommandText.setText("");
+        }
+    }
+
+    private void scrollCommandAreaToBottom() {
+        connectionScroll.fullScroll(View.FOCUS_DOWN);
+    }
+
+    public void appendCommandEcho(String command) {
+        connectionCommandArea.append(getCommandPrompt());
+        connectionCommandArea.append(command);
+        connectionCommandArea.append("\n");
+        scrollCommandAreaToBottom();
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void appendCommandResult(String result) {
+        connectionCommandArea.append(result + "\n");
+        scrollCommandAreaToBottom();
+    }
+
+    public void pushCommandHistory(String command) {
+        commandHistory.add(command);
+    }
+
+    public void onHistoryButtonClick(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String[] stringArray = commandHistory.toArray(new String[0]);
+        builder.setItems(stringArray, ((dialog, which) -> connectionCommandText.append(stringArray[which])));
+        builder.create().show();
     }
 }

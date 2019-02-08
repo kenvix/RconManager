@@ -9,6 +9,6 @@
     <dimen name="item_server_text_layout_padding_horizontal">10dp</dimen>
     <dimen name="item_server_text_layout_padding_top">6dp</dimen>
     <dimen name="item_server_text_name_height">23dp</dimen>
-    <dimen name="connection_command_area">160dp</dimen>
+    <dimen name="connection_command_area">151dp</dimen>
     <dimen name="connection_area_padding">3dp</dimen>
 </resources>

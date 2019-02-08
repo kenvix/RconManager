@@ -8,16 +8,15 @@ import java.lang.ref.WeakReference;
 
 class RconCommanderAsyncTask extends BaseAsyncTask<String, Void, RconCommandResult> {
     private final WeakReference<ConnectionActivity> activityWeakReference;
-    private final WeakReference<RconConnect> rconConnectWeakReference;
+    private final RconConnect rconConnect;
 
     public RconCommanderAsyncTask(RconConnect connect, ConnectionActivity activity) {
         activityWeakReference = new WeakReference<>(activity);
-        rconConnectWeakReference = new WeakReference<>(connect);
+        rconConnect = connect;
     }
 
     @Override
     protected RconCommandResult doInBackground(String... commands) {
-        RconConnect rconConnect = rconConnectWeakReference.get();
 
         try {
             return rconConnect.command(commands[0]);
@@ -31,12 +30,18 @@ class RconCommanderAsyncTask extends BaseAsyncTask<String, Void, RconCommandResu
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
     }
 
     @Override
     protected void onPostExecute(RconCommandResult rconCommandResult) {
         super.onPostExecute(rconCommandResult);
+        if(getException() == null) {
+            if(rconCommandResult != null) {
+                activityWeakReference.get().appendCommandResult(rconCommandResult.getResult());
+            }
+        } else {
+            activityWeakReference.get().appendCommandResult("[ERROR] Failed to run command : " + getException().toString());
+        }
     }
 
 }
