@@ -1,17 +1,19 @@
 package com.kenvix.rconmanager.ui.connection;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.method.ScrollingMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,10 +32,12 @@ import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
+import com.kenvix.rconmanager.ui.main.MainActivity;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ConnectionActivity extends BaseActivity {
     public static final String ExtraRconServer = "rcon_server";
@@ -42,6 +46,7 @@ public class ConnectionActivity extends BaseActivity {
 
     private RconServer rconServer;
     private RconConnect rconConnect = null;
+    private int historyPosition = 0;
     private List<String> commandHistory = new ArrayList<>();
 
     @ViewAutoLoad public Button connectionCommandPrev;
@@ -79,7 +84,11 @@ public class ConnectionActivity extends BaseActivity {
                 Log.d("Connection Activity","rescued activity from intent");
             }
 
+            connectionCommandPrev.setOnClickListener(this::onPreviousCommandButtonClick);
+            connectionCommandNext.setOnClickListener(this::onNextCommandButtonClick);
+
             connectionCommandArea.setText("");
+            connectionCommandArea.setTextSize(Integer.parseInt(Objects.requireNonNull(getPreferences().getString(DefaultPreferences.KeyTerminalTextSize, DefaultPreferences.DefaultTerminalTextSize))));
             connectionCommandText.setImeActionLabel(getString(R.string.action_run), KeyEvent.KEYCODE_ENTER);
             connectionCommandText.setOnKeyListener((view, keyCode, event) -> {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
@@ -185,7 +194,7 @@ public class ConnectionActivity extends BaseActivity {
 
     private void cleanConnectionNotification(int notifyCode) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode);
+        notificationManager.cancel(ApplicationEnvironment.NotificationChannelID.RconConnection, notifyCode);
     }
 
     private int makeConnectionNotification() {
@@ -201,18 +210,28 @@ public class ConnectionActivity extends BaseActivity {
         PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
-        Notification notification = new NotificationCompat.Builder(this, ApplicationEnvironment.NotificationChannelName.RconConnection)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ApplicationEnvironment.NotificationChannelID.RconConnection)
                 .setContentTitle(getString(R.string.prompt_connectied_to) + rconServer.getName())
                 .setContentText(rconServer.getHostAndPort())
                 .setContentIntent(openActivityPendingIntent)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .setSmallIcon(R.drawable.ic_server_3)
                 .setWhen(System.currentTimeMillis())
-                .build();
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+        Notification notification = notificationBuilder.build();
 
         notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 
-        notificationManager.notify(ApplicationEnvironment.NotificationChannelName.RconConnection, notifyCode, notification);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(ApplicationEnvironment.NotificationChannelID.RconConnection, getString(R.string.title_connection), NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.setDescription(getString(R.string.title_connection));
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        notificationManager.notify(ApplicationEnvironment.NotificationChannelID.RconConnection, notifyCode, notification);
+
         return notifyCode;
     }
 
@@ -221,6 +240,7 @@ public class ConnectionActivity extends BaseActivity {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(commandPromptString);
         ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(R.color.colorPrimaryDark));
 
+        assert commandPromptString != null;
         spannableStringBuilder.setSpan(colorPrimaryDark, 0, commandPromptString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableStringBuilder;
     }
@@ -235,6 +255,7 @@ public class ConnectionActivity extends BaseActivity {
             pushCommandHistory(commandText);
             rconCommanderAsyncTask.execute(commandText);
             connectionCommandText.setText("");
+            historyPosition = 0;
         }
     }
 
@@ -264,5 +285,29 @@ public class ConnectionActivity extends BaseActivity {
         String[] stringArray = commandHistory.toArray(new String[0]);
         builder.setItems(stringArray, ((dialog, which) -> connectionCommandText.append(stringArray[which])));
         builder.create().show();
+    }
+
+    public void onPreviousCommandButtonClick(View view) {
+        if(commandHistory.size() > historyPosition) {
+            historyPosition++;
+            connectionCommandText.setText(commandHistory.get(commandHistory.size() - historyPosition));
+        }
+    }
+
+    public void onNextCommandButtonClick(View view) {
+        if(historyPosition > 0) {
+            historyPosition--;
+
+            if(historyPosition > 0)
+                connectionCommandText.setText(commandHistory.get(commandHistory.size() - historyPosition));
+            else
+                connectionCommandText.setText("");
+        }
+    }
+
+    public static void startActivity(Activity activity, RconServer rconServer) {
+        Intent intent = new Intent(activity, ConnectionActivity.class);
+        intent.putExtra(ConnectionActivity.ExtraRconServer, rconServer);
+        activity.startActivity(intent);
     }
 }

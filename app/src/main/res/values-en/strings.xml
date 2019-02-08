@@ -60,4 +60,5 @@
     <string name="desc_command_prompt">Displayed at terminal</string>
     <string name="title_connection">Rcon connection</string>
     <string name="command_result_area">COMMAND RESULT AREA</string>
+    <string name="title_terminal_text_size">Terminal text size</string>
 </resources>

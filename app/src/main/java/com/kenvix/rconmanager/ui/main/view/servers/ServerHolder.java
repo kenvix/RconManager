@@ -42,13 +42,7 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         serverName.setText(server.getName());
         serverAddress.setText(server.getHostAndPort());
 
-        serverItem.setOnClickListener(view -> {
-            MainActivity activity = (MainActivity) getActivityByView(view);
-
-            Intent intent = new Intent(activity, ConnectionActivity.class);
-            intent.putExtra(ConnectionActivity.ExtraRconServer, rconServer);
-            activity.startActivity(intent);
-        });
+        serverItem.setOnClickListener(view -> ConnectionActivity.startActivity(getActivityByView(view), rconServer));
     }
 
     @Override

@@ -10,6 +10,11 @@
             android:dialogMessage=""
             android:defaultValue="λ > " />
 
+        <EditTextPreference
+            android:key="terminal_text_size"
+            android:title="@string/title_terminal_text_size"
+            android:defaultValue="14" />
+
         <CheckBoxPreference
             android:key="auto_start"
             android:title="@string/title_auto_start"

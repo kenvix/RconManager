@@ -8,7 +8,7 @@ import com.kenvix.rconmanager.utils.Invoker;
 public final class ApplicationEnvironment {
     private static final int pausedResponseInterval = 50;
 
-    public static class NotificationChannelName {
+    public static class NotificationChannelID {
         public static String RconConnection = "rcon_connection";
     }
 
