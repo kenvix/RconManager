@@ -78,16 +78,20 @@ public class ViewPreprocessor extends BasePreprocessor {
 
                 if(generateCodeForActivityClass) {
                     builders.forEach(builder -> builder
+                            .beginControlFlow("if(target.$N == null)", fieldVarName)
                             .addStatement("target.$N = target.findViewById($T.$N)",
                                     fieldVarName,
                                     RId,
-                                    RMemberName));
+                                    RMemberName)
+                            .endControlFlow());
                 } else {
                     builders.forEach(builder -> builder
+                            .beginControlFlow("if(target.$N == null)", fieldVarName)
                             .addStatement("target.$N = targetView.findViewById($T.$N)",
                                     fieldVarName,
                                     RId,
-                                    RMemberName));
+                                    RMemberName)
+                            .endControlFlow());
                 }
 
                 builders.forEach(builder -> builder

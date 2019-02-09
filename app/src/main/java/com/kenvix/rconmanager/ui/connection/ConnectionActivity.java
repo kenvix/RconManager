@@ -347,8 +347,10 @@ public class ConnectionActivity extends BaseActivity {
 
     public void exit() {
         try {
-            if(rconConnect != null)
+            if(rconConnect != null) {
                 rconConnect.disconnect();
+                rconConnect = null;
+            }
         } catch (RuntimeException ex) {
             Log.i("Rcon Connection", "Stop connection failed: " + ex.getMessage());
             ex.printStackTrace();

@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity {
     @ViewAutoLoad public Toolbar mainToolbar;
     @ViewAutoLoad public NavigationView mainNavView;
     @ViewAutoLoad public RecyclerView mainServers;
-    @ViewAutoLoad public TextView mainNavText;
     @ViewAutoLoad public DrawerLayout mainDrawerLayout;
 
     private ServerAdapter serverAdapter;
@@ -61,12 +60,12 @@ public class MainActivity extends BaseActivity {
         mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        assert mainNavText != null;
-        mainNavText.setText(getString(R.string.nav_header_subtitle, BuildConfig.VERSION_NAME));
         mainFab.setOnClickListener(view -> AddServerActivity.startActivity(this));
 
         mainNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
     }
+
+
 
     @Override
     protected void onStart() {
@@ -156,7 +155,22 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {
-        return true;
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.nav_server_list:
+                break;
+
+            case R.id.nav_quick_commands:
+                break;
+
+            case R.id.nav_settings:
+                SettingActivity.startActivity(this);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public static void startActivity(Activity activity) {

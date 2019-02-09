@@ -22,6 +22,7 @@ public class SettingActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.setting_fragment_container, new SettingFragment());
+        settingToolbar.setNavigationOnClickListener(view -> finish());
         transaction.commit();
     }
 

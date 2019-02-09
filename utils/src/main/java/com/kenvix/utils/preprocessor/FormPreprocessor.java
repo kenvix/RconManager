@@ -49,6 +49,7 @@ public class FormPreprocessor extends BasePreprocessor {
                                 fieldVarName,
                                 RId,
                                 RMemberName)
+                        .addStatement("assert $N != null", fieldVarName)
                         .beginControlFlow("if($N.getText().toString().isEmpty())", fieldVarName)
                         .addStatement("$N.setError($L) ", fieldVarName, "promptText")
                         .addStatement("return false")
@@ -110,6 +111,7 @@ public class FormPreprocessor extends BasePreprocessor {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(boolean.class)
                 .addParameter(String.class, "promptText")
+                .addStatement("assert targetRaw instanceof $T", targetClassName)
                 .addStatement("$T target = ($T) targetRaw", targetClassName, targetClassName);
     }
 
@@ -119,8 +121,8 @@ public class FormPreprocessor extends BasePreprocessor {
         //ClassName targetClassName = getTargetClassName(clazz);
 
         return new ArrayList<MethodSpec.Builder>() {{
-            add(getCommonFormCheckBuilder(methodName, clazz).
-                    addParameter(Object.class, "targetRaw"));
+            add(getCommonFormCheckBuilder(methodName, clazz)
+                    .addParameter(Object.class, "targetRaw"));
         }};
     }
 
