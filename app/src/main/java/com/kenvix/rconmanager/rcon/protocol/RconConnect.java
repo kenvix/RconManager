@@ -5,9 +5,6 @@
 
 package com.kenvix.rconmanager.rcon.protocol;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.kenvix.rconmanager.rcon.exception.ConnectionException;
 import com.kenvix.rconmanager.rcon.exception.IllegalAuthorizationException;
 import com.kenvix.rconmanager.rcon.exception.MalformedPacketException;

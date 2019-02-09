@@ -23,6 +23,8 @@ import com.kenvix.rconmanager.ui.connection.ConnectionActivity;
 import com.kenvix.rconmanager.ui.main.MainActivity;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
+import java.io.UnsupportedEncodingException;
+
 public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreateContextMenuListener {
     public ImageView imageView;
     private RconServer rconServer;
@@ -90,7 +92,12 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.prompt_share_server));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.text_share_server, rconServer.getName(), rconServer.getHost(), rconServer.getPort(), rconServer.getPassword()));
+            try {
+                shareIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.text_share_server, rconServer.getName(), rconServer.getHost(), rconServer.getPort(), rconServer.getPassword(), rconServer.getRconURLString()));
+            } catch (Exception e) {
+                activity.exceptionSnackbarPrompt(e);
+                e.printStackTrace();
+            }
 
             Intent shareIntentChooser = Intent.createChooser(shareIntent, activity.getString(R.string.prompt_share_server));
             activity.startActivity(shareIntentChooser);

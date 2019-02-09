@@ -4,13 +4,12 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 public final class GlobalDatabaseHelper extends SQLiteOpenHelper {
-    public static final int DatabaseVersion = 1;
-    public static final String DatabaseFileName = "database.sqlite3";
+    static final int DatabaseVersion = 1;
+    static final String DatabaseFileName = "database.sqlite3";
     public Context context;
 
     public GlobalDatabaseHelper(@Nullable Context context) {

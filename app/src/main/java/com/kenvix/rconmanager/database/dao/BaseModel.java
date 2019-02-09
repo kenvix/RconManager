@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
 import com.kenvix.rconmanager.database.GlobalDatabaseHelper;
-import com.kenvix.utils.ReflectTools;
 import com.kenvix.utils.StringTools;
 
 public abstract class BaseModel {

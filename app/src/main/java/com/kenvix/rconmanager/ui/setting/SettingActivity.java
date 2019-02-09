@@ -2,7 +2,6 @@ package com.kenvix.rconmanager.ui.setting;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -10,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.utils.annotation.ViewAutoLoad;
-
-import java.util.Arrays;
 
 public class SettingActivity extends BaseActivity {
     public static final int ActivityRequestCode = 0xac01;

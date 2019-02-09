@@ -3,7 +3,6 @@ package com.kenvix.rconmanager.ui.connection;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.rcon.exception.IllegalAuthorizationException;

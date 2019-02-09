@@ -9,6 +9,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.utils.StringTools;
 
 import java.io.UnsupportedEncodingException;
@@ -111,7 +112,6 @@ public class RconServer implements Cloneable, Parcelable {
 
     /**
      * override this method with CONTENTS_FILE_DESCRIPTOR if sub class has file descriptor
-     * @return
      */
     @Override
     public int describeContents() {
@@ -128,7 +128,7 @@ public class RconServer implements Cloneable, Parcelable {
     }
 
     public String getRconURLString() throws UnsupportedEncodingException {
-        return StringTools.format("rcon://%s@%s:%d#%s", URLEncoder.encode(password, "utf-8"), host, port, URLEncoder.encode(name, "utf-8"));
+        return StringTools.format("rcon://%s@%s:%d/?%s=%s", URLEncoder.encode(password, "utf-8"), host, port, ApplicationEnvironment.getRconURINameParamKey(), URLEncoder.encode(name, "utf-8"));
     }
 
     public URL getRconURL() throws UnsupportedEncodingException, MalformedURLException {

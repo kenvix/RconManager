@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
@@ -65,10 +66,31 @@ public class ConnectionActivity extends BaseActivity {
         try {
 
             Intent intent = getIntent();
+
+
             rconServer = intent.getParcelableExtra(ExtraRconServer);
 
-            if(rconServer == null)
-                throw new IllegalArgumentException("ExtraRconServer CAN'T be null");
+            if(rconServer == null) {
+                Uri uriCall = intent.getData();
+
+                if (uriCall == null)
+                    throw new IllegalArgumentException("Either ExtraRconServer or URI CAN'T be null");
+
+                String host = uriCall.getHost();
+                int port = uriCall.getPort();
+
+                if(host == null || host.isEmpty() || port < 1 || port > 65535)
+                    throw new IllegalArgumentException("Illegal host or port");
+
+                String password = (uriCall.getAuthority() == null || uriCall.getAuthority().isEmpty()) ? "" : uriCall.getAuthority();
+                String name = uriCall.getQueryParameter(ApplicationEnvironment.getRconURINameParamKey());
+
+                if(name == null || name.isEmpty())
+                    name = getString(R.string.title_unnamed);
+
+                rconServer = new RconServer(name, host, port, password);
+
+            }
 
             connectionToolbar.setTitle(rconServer.getName());
             setSupportActionBar(connectionToolbar);
@@ -114,6 +136,7 @@ public class ConnectionActivity extends BaseActivity {
     public void onRconConnectionEstablished(RconConnect connect) {
         rconConnect = connect;
         connectionCommandRun.setEnabled(true);
+        connectionCommandArea.setTextIsSelectable(true);
     }
 
     @Override
@@ -154,18 +177,25 @@ public class ConnectionActivity extends BaseActivity {
 
         switch (id) {
             case R.id.connection_command_area:
+                connectionCommandArea.setText("");
                 return true;
 
             case R.id.connection_exit:
+                exit();
                 return true;
 
             case R.id.connection_back:
+                MainActivity.startActivity(this);
                 return true;
 
             case R.id.connection_clean_command_history:
+                historyPosition = 0;
+                commandHistory.clear();
                 return true;
 
             case R.id.connection_connection_info:
+                alertDialog(getString(R.string.prompt_connection_info, rconServer.getName(), rconServer.getHost(), rconServer.getPort()),
+                        getString(R.string.title_connection_info), null);
                 return true;
 
         }
@@ -288,21 +318,44 @@ public class ConnectionActivity extends BaseActivity {
     }
 
     public void onPreviousCommandButtonClick(View view) {
-        if(commandHistory.size() > historyPosition) {
-            historyPosition++;
-            connectionCommandText.setText(commandHistory.get(commandHistory.size() - historyPosition));
+        try {
+            if(commandHistory.size() > historyPosition) {
+                historyPosition++;
+                connectionCommandText.setText(commandHistory.get(commandHistory.size() - historyPosition));
+            }
+        } catch (RuntimeException ex) {
+            exceptionSnackbarPrompt(ex);
+            ex.printStackTrace();
         }
     }
 
     public void onNextCommandButtonClick(View view) {
-        if(historyPosition > 0) {
-            historyPosition--;
+        try {
+            if(historyPosition > 0) {
+                historyPosition--;
 
-            if(historyPosition > 0)
-                connectionCommandText.setText(commandHistory.get(commandHistory.size() - historyPosition));
-            else
-                connectionCommandText.setText("");
+                if(historyPosition > 0)
+                    connectionCommandText.setText(commandHistory.get(commandHistory.size() - historyPosition));
+                else
+                    connectionCommandText.setText("");
+            }
+        } catch (RuntimeException ex) {
+            exceptionSnackbarPrompt(ex);
+            ex.printStackTrace();
         }
+    }
+
+    public void exit() {
+        try {
+            if(rconConnect != null)
+                rconConnect.disconnect();
+        } catch (RuntimeException ex) {
+            Log.i("Rcon Connection", "Stop connection failed: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        setResult(RESULT_OK);
+        finish();
     }
 
     public static void startActivity(Activity activity, RconServer rconServer) {

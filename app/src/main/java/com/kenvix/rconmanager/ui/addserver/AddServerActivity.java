@@ -1,7 +1,6 @@
 package com.kenvix.rconmanager.ui.addserver;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.Toolbar;
@@ -16,8 +15,8 @@ import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.main.MainActivity;
 import com.kenvix.rconmanager.utils.Invoker;
-import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.ViewAutoLoad;
+import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.form.FormNumberLessOrEqual;
 import com.kenvix.utils.annotation.form.FormNumberMoreOrEqual;
 

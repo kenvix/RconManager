@@ -4,8 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
+import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 
 import java.util.HashMap;
 import java.util.Map;

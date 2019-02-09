@@ -58,13 +58,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void exceptionToastPrompt(Throwable throwable) {
         toast(getString(R.string.error_operation_failed) + throwable.getLocalizedMessage());
-        Log.w("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
+        Log.e("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
         throwable.printStackTrace();
     }
 
     public void exceptionSnackbarPrompt(Throwable throwable) {
         snackbar(getString(R.string.error_operation_failed) + throwable.getLocalizedMessage(), Snackbar.LENGTH_LONG);
-        Log.w("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
+        Log.e("Global Exception Prompt", "Operation FAILED: " + throwable.getMessage());
         throwable.printStackTrace();
     }
 

@@ -7,6 +7,11 @@ import com.kenvix.rconmanager.utils.Invoker;
 
 public final class ApplicationEnvironment {
     private static final int pausedResponseInterval = 50;
+    private static final String RconURINameParamKey = "name";
+
+    public static String getRconURINameParamKey() {
+        return RconURINameParamKey;
+    }
 
     public static class NotificationChannelID {
         public static String RconConnection = "rcon_connection";

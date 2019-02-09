@@ -36,7 +36,7 @@
     <string name="success_add">Successfully added %s</string>
     <string name="name_duplicated">" - Duplicated"</string>
     <string name="success_duplicated">Duplicated %s</string>
-    <string name="text_share_server">Rcon Server Information\nName: %s\nHost: %s\nPort number: %d\nPassword: %s</string>
+    <string name="text_share_server">Rcon Server Information\nName: %s\nHost: %s\nPort number: %d\nPassword: %s\n%s</string>
     <string name="prompt_share_server">Share server information (Notice: Including Rcon server password)</string>
     <string name="prompt_command">Command</string>
     <string name="action_run">Run</string>
@@ -61,4 +61,8 @@
     <string name="title_connection">Rcon connection</string>
     <string name="command_result_area">COMMAND RESULT AREA</string>
     <string name="title_terminal_text_size">Terminal text size</string>
+    <string name="title_activity_setting">Settings</string>
+    <string name="title_unnamed">Unnamed</string>
+    <string name="prompt_connection_info">Name: %s\nHost: %s\nPort: %d</string>
+    <string name="title_connection_info">Connection info</string>
 </resources>
