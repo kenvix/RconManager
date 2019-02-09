@@ -79,4 +79,9 @@
     <string name="nav_quick_commands">快捷命令</string>
     <string name="nav_settings">设置</string>
     <string name="title_application">应用和偏好</string>
+    <string name="quick_command_name">Command name</string>
+    <string name="quick_command_value">Command value</string>
+    <string name="action_save">保存</string>
+    <string name="prompt_value">值</string>
+    <string name="text_quick_command_edit_mode">编辑模式 / 正在编辑快捷命令：</string>
 </resources>

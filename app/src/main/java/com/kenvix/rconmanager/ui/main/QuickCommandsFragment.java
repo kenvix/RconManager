@@ -14,7 +14,7 @@ public class QuickCommandsFragment extends BaseFragment {
 
     @Override
     protected int getFragmentContentLayout() {
-        return R.layout.activity_main;
+        return R.layout.fragment_quick_commands;
     }
 
     @Override

@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_quick_command_item_edit"
+        android:orderInCategory="0"
+        android:title="@string/action_edit"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_quick_command_item_duplicate"
+        android:orderInCategory="2"
+        android:title="@string/action_duplicate"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_quick_command_item_delete"
+        android:orderInCategory="3"
+        android:title="@string/action_delete"
+        app:showAsAction="never" />
+</menu>
