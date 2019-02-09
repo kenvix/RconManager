@@ -49,7 +49,7 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         MainActivity activity = (MainActivity) getActivityByView(v);
         activity.getMenuInflater().inflate(R.menu.menu_server_item, menu);
-        ServerModel serverModel = activity.getServerModel();
+        ServerModel serverModel = new ServerModel(activity);
 
         menu.findItem(R.id.action_server_item_delete).setOnMenuItemClickListener(view -> {
             activity.confirmDialog(activity.getString(R.string.confirm_server_delete, rconServer.getName()), result -> {

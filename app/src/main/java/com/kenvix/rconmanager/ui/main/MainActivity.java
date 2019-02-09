@@ -12,6 +12,8 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +31,7 @@ import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.main.view.servers.ServerAdapter;
 import com.kenvix.rconmanager.ui.setting.SettingActivity;
+import com.kenvix.rconmanager.ui.setting.SettingFragment;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
 import java.util.ArrayList;
@@ -37,17 +40,16 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     public static final int ActivityRequestCode = 0xac02;
 
+    private FragmentManager fragmentManager;
+    private ServersFragment serversFragment;
+    private QuickCommandsFragment quickCommandsFragment;
+
     public static final String ExtraPromptText = "prompt_text";
     public static final String ExtraRequestReload = "request_reload";
 
-    @ViewAutoLoad public FloatingActionButton mainFab;
     @ViewAutoLoad public Toolbar mainToolbar;
     @ViewAutoLoad public NavigationView mainNavView;
-    @ViewAutoLoad public RecyclerView mainServers;
     @ViewAutoLoad public DrawerLayout mainDrawerLayout;
-
-    private ServerAdapter serverAdapter;
-    private ServerModel serverModel;
 
     @Override
     protected void onInitialize() {
@@ -60,17 +62,21 @@ public class MainActivity extends BaseActivity {
         mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        mainFab.setOnClickListener(view -> AddServerActivity.startActivity(this));
+        fragmentManager = getSupportFragmentManager();
+        quickCommandsFragment = new QuickCommandsFragment();
+        serversFragment = new ServersFragment();
 
         mainNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-    }
 
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.main_fragment_container, serversFragment);
+        transaction.commit();
+    }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        reloadServerRecyclerView();
     }
 
     @Override
@@ -126,34 +132,6 @@ public class MainActivity extends BaseActivity {
         return R.id.main_container;
     }
 
-    public void reloadServerRecyclerView() {
-        List<RconServer> servers = new ArrayList<>();
-        serverModel = new ServerModel(this);
-
-        try (Cursor serverCursor = serverModel.getAll()) {
-
-            while (serverCursor.moveToNext()) {
-                servers.add(new RconServer(
-                        serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldName)),
-                        serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldHost)),
-                        serverCursor.getInt(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPort)),
-                        serverCursor.getString(serverCursor.getColumnIndexOrThrow(ServerModel.FieldPassword))
-                ).setSid(serverCursor.getInt(serverCursor.getColumnIndexOrThrow(ServerModel.FieldSid))));
-            }
-
-        } catch (Exception ex) {
-            toast(getString(R.string.error_unable_load_servers) + ex.getLocalizedMessage());
-            ex.printStackTrace();
-        }
-
-        serverAdapter = new ServerAdapter(servers, this);
-        serverAdapter.initializeRecyclerView(getWindow().getDecorView());
-    }
-
-    public ServerModel getServerModel() {
-        return serverModel;
-    }
-
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -171,6 +149,10 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void reloadServerRecyclerView() {
+        serversFragment.reloadServerRecyclerView();
     }
 
     public static void startActivity(Activity activity) {
