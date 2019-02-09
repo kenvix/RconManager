@@ -65,4 +65,12 @@
     <string name="title_unnamed">Unnamed</string>
     <string name="prompt_connection_info">Name: %s\nHost: %s\nPort: %d</string>
     <string name="title_connection_info">Connection info</string>
+
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="navigation_drawer_open">Open navigation</string>
+    <string name="navigation_drawer_close">Close navigation</string>
+    <string name="nav_quick_commands">Quick Commands</string>
+    <string name="nav_server_list">Server List</string>
+    <string name="nav_settings">Settings</string>
+    <string name="title_application">Application and Preference</string>
 </resources>

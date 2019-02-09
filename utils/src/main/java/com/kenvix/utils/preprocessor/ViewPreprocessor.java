@@ -89,6 +89,10 @@ public class ViewPreprocessor extends BasePreprocessor {
                                     RId,
                                     RMemberName));
                 }
+
+                builders.forEach(builder -> builder
+                        .addStatement("assert target.$N != null",
+                                fieldVarName));
             }
         });
     }
@@ -99,6 +103,8 @@ public class ViewPreprocessor extends BasePreprocessor {
         return MethodSpec
                 .methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addStatement("assert targetRaw != null")
+                .addStatement("assert targetRaw instanceof $T", targetClassName)
                 .addStatement("$T target = ($T) targetRaw", targetClassName, targetClassName)
                 .returns(void.class);
     }

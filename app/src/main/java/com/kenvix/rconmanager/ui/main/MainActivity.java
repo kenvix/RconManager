@@ -8,14 +8,20 @@ package com.kenvix.rconmanager.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
+import com.kenvix.rconmanager.BuildConfig;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
@@ -36,7 +42,10 @@ public class MainActivity extends BaseActivity {
 
     @ViewAutoLoad public FloatingActionButton mainFab;
     @ViewAutoLoad public Toolbar mainToolbar;
+    @ViewAutoLoad public NavigationView mainNavView;
     @ViewAutoLoad public RecyclerView mainServers;
+    @ViewAutoLoad public TextView mainNavText;
+    @ViewAutoLoad public DrawerLayout mainDrawerLayout;
 
     private ServerAdapter serverAdapter;
     private ServerModel serverModel;
@@ -47,7 +56,16 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(mainToolbar);
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mainDrawerLayout, mainToolbar, R.string.desc_auto_start, R.string.desc_command_prompt);
+        mainDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        assert mainNavText != null;
+        mainNavText.setText(getString(R.string.nav_header_subtitle, BuildConfig.VERSION_NAME));
         mainFab.setOnClickListener(view -> AddServerActivity.startActivity(this));
+
+        mainNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
     }
 
     @Override
@@ -135,6 +153,10 @@ public class MainActivity extends BaseActivity {
 
     public ServerModel getServerModel() {
         return serverModel;
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
+        return true;
     }
 
     public static void startActivity(Activity activity) {

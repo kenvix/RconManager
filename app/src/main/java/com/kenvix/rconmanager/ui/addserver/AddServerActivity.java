@@ -91,12 +91,6 @@ public class AddServerActivity extends BaseActivity {
 
     }
 
-    public void test(String promptText) {
-        //EditText fuck = findViewById()
-        //if(target.addServerName.getText().toString().isEmpty())
-        //    target.addServerName.setError("fuck you");
-    }
-
     private boolean isEditMode() {
         return editTargetId > -1;
     }

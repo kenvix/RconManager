@@ -23,8 +23,6 @@ import com.kenvix.rconmanager.ui.connection.ConnectionActivity;
 import com.kenvix.rconmanager.ui.main.MainActivity;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 
-import java.io.UnsupportedEncodingException;
-
 public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreateContextMenuListener {
     public ImageView imageView;
     private RconServer rconServer;

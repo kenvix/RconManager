@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/title_main">
+        <menu>
+            <item
+                android:id="@+id/nav_server_list"
+                android:icon="@drawable/ic_server"
+                android:title="@string/nav_server_list" />
+
+            <item
+                android:id="@+id/nav_quick_commands"
+                android:icon="@drawable/ic_run"
+                android:title="@string/nav_quick_commands" />
+        </menu>
+    </item>
+
+    <item android:title="@string/title_application">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_wrench"
+                android:title="@string/nav_settings" />
+        </menu>
+    </item>
+
+</menu>

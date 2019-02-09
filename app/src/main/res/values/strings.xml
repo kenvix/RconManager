@@ -70,4 +70,13 @@
     <string name="title_unnamed">未命名</string>
     <string name="prompt_connection_info">名称: %s\n主机: %s\n端口: %d</string>
     <string name="title_connection_info">连接信息</string>
+
+    <string name="nav_header_subtitle" translatable="false">Ver.%s // By Kenvix</string>
+    <string name="navigation_drawer_open">打开菜单栏</string>
+    <string name="navigation_drawer_close">关闭菜单栏</string>
+    <string name="nav_header_desc">导航栏头部</string>
+    <string name="nav_server_list">服务器列表</string>
+    <string name="nav_quick_commands">快捷命令</string>
+    <string name="nav_settings">设置</string>
+    <string name="title_application">应用和偏好</string>
 </resources>
