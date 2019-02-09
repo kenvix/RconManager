@@ -16,6 +16,10 @@ public class QuickCommandModel extends BaseModel {
         super(context);
     }
 
+    public Cursor getAll() {
+        return select(null, null);
+    }
+
     public void add(String name, String value) throws SQLException {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FieldName, name);

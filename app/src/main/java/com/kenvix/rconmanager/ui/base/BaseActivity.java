@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,11 +24,14 @@ import com.kenvix.rconmanager.utils.Invoker;
 import java.util.function.Consumer;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    protected FragmentManager fragmentManager;
+    private BaseFragment foregroundFragment = null;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getBaseLayout());
+        fragmentManager = getSupportFragmentManager();
         Invoker.invokeViewAutoLoader(this);
 
         onInitialize();
@@ -118,7 +123,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
+    public boolean setForegroundFragment(int container, BaseFragment fragment) {
+        if(foregroundFragment == null || !foregroundFragment.equals(fragment)) {
+            foregroundFragment = fragment;
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(container, fragment);
+            transaction.commit();
+            return true;
+        }
+        return false;
+    }
+
     protected abstract void onInitialize();
     protected abstract int getBaseLayout();
     protected abstract int getBaseContainer();
+
+    public BaseFragment getForegroundFragment() {
+        return foregroundFragment;
+    }
 }

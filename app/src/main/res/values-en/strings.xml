@@ -73,8 +73,12 @@
     <string name="nav_server_list">Server List</string>
     <string name="nav_settings">Settings</string>
     <string name="title_application">Application and Preference</string>
-    <string name="quick_command_name">Command name</string>
+    <string name="quick_command_name">快捷命令名称</string>
     <string name="action_save">Save</string>
     <string name="prompt_value">Value</string>
     <string name="text_quick_command_edit_mode">"Editor mode / Editing quick command "</string>
+    <string name="action_open">Open</string>
+    <string name="action_close">Close</string>
+    <string name="title_add_quick_command">Add or modify quick command</string>
+    <string name="title_quick_command">Quick commands</string>
 </resources>

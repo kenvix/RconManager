@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 public final class GlobalDatabaseHelper extends SQLiteOpenHelper {
-    static final int DatabaseVersion = 1;
+    static final int DatabaseVersion = 2;
     static final String DatabaseFileName = "database.sqlite3";
     public Context context;
 
@@ -39,6 +39,7 @@ public final class GlobalDatabaseHelper extends SQLiteOpenHelper {
 
         try {
             db.execSQL(IntegratedSQLCommands.getCreateServerListTableSQL());
+            db.execSQL(IntegratedSQLCommands.getCreateQuickCommandsTableSQL());
 
             db.setTransactionSuccessful();
         } catch (Exception ex) {

@@ -55,7 +55,7 @@ public class QuickCommandsHolder extends BaseHolder<QuickCommand> implements Vie
                     try {
                         quickCommandModel.deleteByCid(quickCommand.getCid());
                         activity.snackbar(activity.getString(R.string.prompt_deleted, quickCommand.getName()));
-                        activity.reloadServerRecyclerView();
+                        activity.reloadQuickCommandRecyclerView();
                     } catch (Exception ex) {
                         activity.exceptionSnackbarPrompt(ex);
                     }
@@ -71,7 +71,7 @@ public class QuickCommandsHolder extends BaseHolder<QuickCommand> implements Vie
                 quickCommandModel.add(newInstance);
 
                 activity.snackbar(activity.getString(R.string.success_duplicated, quickCommand.getName()));
-                activity.reloadServerRecyclerView();
+                activity.reloadQuickCommandRecyclerView();
             } catch (Exception ex) {
                 activity.exceptionSnackbarPrompt(ex);
             }

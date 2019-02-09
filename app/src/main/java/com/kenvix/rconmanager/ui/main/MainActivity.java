@@ -40,16 +40,18 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     public static final int ActivityRequestCode = 0xac02;
 
-    private FragmentManager fragmentManager;
     private ServersFragment serversFragment;
     private QuickCommandsFragment quickCommandsFragment;
 
     public static final String ExtraPromptText = "prompt_text";
     public static final String ExtraRequestReload = "request_reload";
 
-    @ViewAutoLoad public Toolbar mainToolbar;
-    @ViewAutoLoad public NavigationView mainNavView;
-    @ViewAutoLoad public DrawerLayout mainDrawerLayout;
+    @ViewAutoLoad
+    public Toolbar mainToolbar;
+    @ViewAutoLoad
+    public NavigationView mainNavView;
+    @ViewAutoLoad
+    public DrawerLayout mainDrawerLayout;
 
     @Override
     protected void onInitialize() {
@@ -58,19 +60,16 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(mainToolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mainDrawerLayout, mainToolbar, R.string.desc_auto_start, R.string.desc_command_prompt);
+                this, mainDrawerLayout, mainToolbar, R.string.action_open, R.string.action_close);
         mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        fragmentManager = getSupportFragmentManager();
         quickCommandsFragment = new QuickCommandsFragment();
         serversFragment = new ServersFragment();
 
         mainNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.main_fragment_container, serversFragment);
-        transaction.commit();
+        setForegroundFragment(R.id.main_fragment_container, serversFragment);
     }
 
 
@@ -83,15 +82,15 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(data != null && resultCode == RESULT_OK) {
+        if (data != null && resultCode == RESULT_OK) {
 
-            if(requestCode == AddServerActivity.ActivityRequestCode) {
-                if(data.getBooleanExtra(AddServerActivity.ParamRequestReload, false))
+            if (requestCode == AddServerActivity.ActivityRequestCode) {
+                if (data.getBooleanExtra(AddServerActivity.ParamRequestReload, false))
                     reloadServerRecyclerView();
             }
 
             String promptText = data.getStringExtra(ExtraPromptText);
-            if(!promptText.isEmpty())
+            if (!promptText.isEmpty())
                 snackbar(promptText);
         }
     }
@@ -114,7 +113,7 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.main_action_settings) {
             SettingActivity.startActivity(this);
             return true;
-        } else if(id == R.id.main_action_refresh) {
+        } else if (id == R.id.main_action_refresh) {
             reloadServerRecyclerView();
             return true;
         }
@@ -134,25 +133,38 @@ public class MainActivity extends BaseActivity {
 
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        super.onOptionsItemSelected(item);
 
-        //noinspection SimplifiableIfStatement
-        switch (id) {
-            case R.id.nav_server_list:
-                break;
+        try {
+            //noinspection SimplifiableIfStatement
+            switch (id) {
+                case R.id.nav_server_list:
+                    setForegroundFragment(R.id.main_fragment_container, serversFragment);
+                    setTitle(getString(R.string.title_main));
+                    break;
 
-            case R.id.nav_quick_commands:
-                break;
+                case R.id.nav_quick_commands:
+                    setForegroundFragment(R.id.main_fragment_container, quickCommandsFragment);
+                    setTitle(getString(R.string.title_quick_command));
+                    break;
 
-            case R.id.nav_settings:
-                SettingActivity.startActivity(this);
-                break;
+                case R.id.nav_settings:
+                    SettingActivity.startActivity(this);
+                    break;
+            }
+        } catch (Exception ex) {
+            exceptionSnackbarPrompt(ex);
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void reloadServerRecyclerView() {
         serversFragment.reloadServerRecyclerView();
+    }
+
+    public void reloadQuickCommandRecyclerView() {
+        quickCommandsFragment.reloadQuickCommandRecyclerView();
     }
 
     public static void startActivity(Activity activity) {

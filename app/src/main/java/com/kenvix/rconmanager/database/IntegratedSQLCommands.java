@@ -11,4 +11,12 @@ final class IntegratedSQLCommands {
                 ");";
     }
 
+    static String getCreateQuickCommandsTableSQL() {
+        return "CREATE TABLE IF NOT EXISTS \"main\".\"quick_command\" (\n" +
+                "  \"cid\" INTEGER NOT NULL ON CONFLICT FAIL PRIMARY KEY AUTOINCREMENT,\n" +
+                "  \"name\" TEXT NOT NULL ON CONFLICT FAIL,\n" +
+                "  \"value\" TEXT NOT NULL ON CONFLICT FAIL\n" +
+                ");";
+    }
+
 }

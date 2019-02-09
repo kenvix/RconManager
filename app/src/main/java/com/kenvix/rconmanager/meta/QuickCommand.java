@@ -63,15 +63,18 @@ public class QuickCommand implements Cloneable, Parcelable {
         return (QuickCommand) super.clone();
     }
 
-    public void setCid(int cid) {
+    public QuickCommand setCid(int cid) {
         this.cid = cid;
+        return this;
     }
 
-    public void setValue(String value) {
+    public QuickCommand setValue(String value) {
         this.value = value;
+        return this;
     }
 
-    public void setName(String name) {
+    public QuickCommand setName(String name) {
         this.name = name;
+        return this;
     }
 }

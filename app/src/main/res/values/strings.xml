@@ -84,4 +84,8 @@
     <string name="action_save">保存</string>
     <string name="prompt_value">值</string>
     <string name="text_quick_command_edit_mode">编辑模式 / 正在编辑快捷命令：</string>
+    <string name="action_open">打开</string>
+    <string name="action_close">关闭</string>
+    <string name="title_add_quick_command">添加或修改快捷命令</string>
+    <string name="title_quick_command">快捷命令列表</string>
 </resources>

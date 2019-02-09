@@ -11,15 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.kenvix.rconmanager.R;
-import com.kenvix.rconmanager.rcon.meta.RconServer;
+import com.kenvix.rconmanager.meta.QuickCommand;
 import com.kenvix.rconmanager.ui.base.view.base.BaseAdapter;
 
 import java.util.List;
 
-public class QuickCommandsAdapter extends BaseAdapter<ServerHolder, RconServer> {
+public class QuickCommandsAdapter extends BaseAdapter<QuickCommandsHolder, QuickCommand> {
 
-    public QuickCommandsAdapter(List<RconServer> servers, Context context) {
-        super(servers, context);
+    public QuickCommandsAdapter(List<QuickCommand> quickCommands, Context context) {
+        super(quickCommands, context);
     }
 
     @Override
@@ -30,17 +30,17 @@ public class QuickCommandsAdapter extends BaseAdapter<ServerHolder, RconServer> 
 
     @Override
     protected int getRecyclerViewLayoutId() {
-        return R.layout.item_server;
+        return R.layout.item_quick_command;
     }
 
     @Override
     protected int getRecyclerViewControlId() {
-        return R.id.main_servers;
+        return R.id.main_quick_commands;
     }
 
     @NonNull
     @Override
-    protected Class<ServerHolder> getHolderClass() {
-        return ServerHolder.class;
+    protected Class<QuickCommandsHolder> getHolderClass() {
+        return QuickCommandsHolder.class;
     }
 }
