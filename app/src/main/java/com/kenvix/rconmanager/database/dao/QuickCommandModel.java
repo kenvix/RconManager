@@ -4,8 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.util.Log;
 
+import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.meta.QuickCommand;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuickCommandModel extends BaseModel {
     public static final String FieldCid   = "cid";
@@ -16,8 +21,28 @@ public class QuickCommandModel extends BaseModel {
         super(context);
     }
 
-    public Cursor getAll() {
+    public Cursor getAllAsCursor() {
         return select(null, null);
+    }
+
+    public List<QuickCommand> getAllAsList() {
+        List<QuickCommand> quickCommands = new ArrayList<>();
+
+        try (Cursor QuickCommandCursor = getAllAsCursor()) {
+
+            while (QuickCommandCursor.moveToNext()) {
+                quickCommands.add(new QuickCommand(
+                        QuickCommandCursor.getString(QuickCommandCursor.getColumnIndexOrThrow(QuickCommandModel.FieldName)),
+                        QuickCommandCursor.getString(QuickCommandCursor.getColumnIndexOrThrow(QuickCommandModel.FieldValue))
+                ).setCid(QuickCommandCursor.getInt(QuickCommandCursor.getColumnIndexOrThrow(QuickCommandModel.FieldCid))));
+            }
+
+            return quickCommands;
+        } catch (Exception ex) {
+            Log.e("QuickCommandModel", "getAllAsList failed");
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
     public void add(String name, String value) throws SQLException {

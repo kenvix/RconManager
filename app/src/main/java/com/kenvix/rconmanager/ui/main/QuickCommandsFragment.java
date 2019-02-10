@@ -41,27 +41,18 @@ public class QuickCommandsFragment extends BaseFragment {
     }
 
     public void reloadQuickCommandRecyclerView() {
-        List<QuickCommand> quickCommands = new ArrayList<>();
+        List<QuickCommand> quickCommands;
         quickCommandModel = new QuickCommandModel(getContext());
 
-        try (Cursor QuickCommandCursor = quickCommandModel.getAll()) {
+        try {
+            quickCommands = quickCommandModel.getAllAsList();
 
-            while (QuickCommandCursor.moveToNext()) {
-                quickCommands.add(new QuickCommand(
-                        QuickCommandCursor.getString(QuickCommandCursor.getColumnIndexOrThrow(QuickCommandModel.FieldName)),
-                        QuickCommandCursor.getString(QuickCommandCursor.getColumnIndexOrThrow(QuickCommandModel.FieldValue))
-                ).setCid(QuickCommandCursor.getInt(QuickCommandCursor.getColumnIndexOrThrow(QuickCommandModel.FieldCid))));
-            }
-
+            quickCommandsAdapter = new QuickCommandsAdapter(quickCommands, getContext());
+            quickCommandsAdapter.initializeRecyclerView(getBaseActivity().getWindow().getDecorView());
         } catch (Exception ex) {
             getBaseActivity().toast(getString(R.string.error_unable_load_servers) + ex.getLocalizedMessage());
             ex.printStackTrace();
         }
-
-        quickCommandsAdapter = new QuickCommandsAdapter(quickCommands, getContext());
-
-
-        quickCommandsAdapter.initializeRecyclerView(getBaseActivity().getWindow().getDecorView());
     }
 
     public QuickCommandModel getQuickCommandModel() {

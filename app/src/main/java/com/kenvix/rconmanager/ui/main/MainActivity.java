@@ -85,14 +85,23 @@ public class MainActivity extends BaseActivity {
         if (data != null && resultCode == RESULT_OK) {
 
             if (requestCode == AddServerActivity.ActivityRequestCode) {
-                if (data.getBooleanExtra(AddServerActivity.ParamRequestReload, false))
-                    reloadServerRecyclerView();
+                if (data.getBooleanExtra(AddServerActivity.ParamRequestReload, false)) {
+                    reloadCurrentRecyclerView();
+                }
             }
 
             String promptText = data.getStringExtra(ExtraPromptText);
             if (!promptText.isEmpty())
                 snackbar(promptText);
         }
+    }
+
+    private void reloadCurrentRecyclerView() {
+        if(serversFragment.isVisible())
+            reloadServerRecyclerView();
+
+        if(quickCommandsFragment.isVisible())
+            reloadQuickCommandRecyclerView();
     }
 
     @Override
@@ -114,7 +123,7 @@ public class MainActivity extends BaseActivity {
             SettingActivity.startActivity(this);
             return true;
         } else if (id == R.id.main_action_refresh) {
-            reloadServerRecyclerView();
+            reloadCurrentRecyclerView();
             return true;
         }
 
@@ -156,6 +165,7 @@ public class MainActivity extends BaseActivity {
             exceptionSnackbarPrompt(ex);
         }
 
+        mainDrawerLayout.closeDrawers();
         return true;
     }
 

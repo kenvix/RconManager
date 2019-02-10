@@ -81,4 +81,5 @@
     <string name="action_close">Close</string>
     <string name="title_add_quick_command">Add or modify quick command</string>
     <string name="title_quick_command">Quick commands</string>
+    <string name="quick_command_value">Command value</string>
 </resources>

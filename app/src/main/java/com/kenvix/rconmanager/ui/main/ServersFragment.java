@@ -43,7 +43,7 @@ public class ServersFragment extends BaseFragment {
         List<RconServer> servers = new ArrayList<>();
         serverModel = new ServerModel(getContext());
 
-        try (Cursor serverCursor = serverModel.getAll()) {
+        try (Cursor serverCursor = serverModel.getAllAsCursor()) {
 
             while (serverCursor.moveToNext()) {
                 servers.add(new RconServer(

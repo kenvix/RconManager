@@ -124,14 +124,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public boolean setForegroundFragment(int container, BaseFragment fragment) {
-        if(foregroundFragment == null || !foregroundFragment.equals(fragment)) {
-            foregroundFragment = fragment;
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if(foregroundFragment != null)
+            transaction.hide(foregroundFragment);
+
+        foregroundFragment = fragment;
+
+        if(!fragment.isAdded()) {
             transaction.add(container, fragment);
-            transaction.commit();
-            return true;
+        } else {
+            transaction.show(fragment);
         }
-        return false;
+
+        transaction.commit();
+        return true;
     }
 
     protected abstract void onInitialize();

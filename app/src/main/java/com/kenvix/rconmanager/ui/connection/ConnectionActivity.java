@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.DefaultPreferences;
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.database.dao.QuickCommandModel;
+import com.kenvix.rconmanager.meta.QuickCommand;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
@@ -48,7 +50,10 @@ public class ConnectionActivity extends BaseActivity {
     private RconServer rconServer;
     private RconConnect rconConnect = null;
     private int historyPosition = 0;
+    private boolean allowRunCommand = false;
     private List<String> commandHistory = new ArrayList<>();
+    private List<QuickCommand> quickCommands = null;
+    private String[] quickCommandNames = null;
 
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
@@ -108,14 +113,14 @@ public class ConnectionActivity extends BaseActivity {
 
             connectionCommandPrev.setOnClickListener(this::onPreviousCommandButtonClick);
             connectionCommandNext.setOnClickListener(this::onNextCommandButtonClick);
+            connectionQuickCommand.setOnClickListener(this::onQuickCommandButtonClick);
 
             connectionCommandArea.setText("");
             connectionCommandArea.setTextSize(Integer.parseInt(Objects.requireNonNull(getPreferences().getString(DefaultPreferences.KeyTerminalTextSize, DefaultPreferences.DefaultTerminalTextSize))));
             connectionCommandText.setImeActionLabel(getString(R.string.action_run), KeyEvent.KEYCODE_ENTER);
             connectionCommandText.setOnKeyListener((view, keyCode, event) -> {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    connectionCommandRun.performClick();
-                    connectionCommandText.requestFocus();
+                    runCommand();
                     return true;
                 }
                 return false;
@@ -133,9 +138,16 @@ public class ConnectionActivity extends BaseActivity {
         }
     }
 
+    private void onQuickCommandButtonClick(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        List<QuickCommand> quickCommands = getQuickCommands();
+        builder.setItems(quickCommandNames, ((dialog, which) -> runCommand(quickCommands.get(which).getValue())));
+        builder.create().show();
+    }
+
     public void onRconConnectionEstablished(RconConnect connect) {
         rconConnect = connect;
-        connectionCommandRun.setEnabled(true);
+        setAllowRunCommand(true);
         connectionCommandArea.setTextIsSelectable(true);
     }
 
@@ -277,15 +289,23 @@ public class ConnectionActivity extends BaseActivity {
 
 
     public void onRunButtonClick(View view) {
-        String commandText = connectionCommandText.getText().toString();
+        runCommand();
+    }
 
-        if(!commandText.isEmpty()) {
-            RconCommanderAsyncTask rconCommanderAsyncTask = new RconCommanderAsyncTask(rconConnect, this);
-            appendCommandEcho(commandText);
-            pushCommandHistory(commandText);
-            rconCommanderAsyncTask.execute(commandText);
-            connectionCommandText.setText("");
-            historyPosition = 0;
+    private void runCommand() {
+        runCommand(connectionCommandText.getText().toString());
+        connectionCommandText.setText("");
+        historyPosition = 0;
+    }
+
+    private void runCommand(String commandText) {
+        if(isAllowRunCommand()) {
+            if(!commandText.isEmpty()) {
+                RconCommanderAsyncTask rconCommanderAsyncTask = new RconCommanderAsyncTask(rconConnect, this);
+                appendCommandEcho(commandText);
+                pushCommandHistory(commandText);
+                rconCommanderAsyncTask.execute(commandText);
+            }
         }
     }
 
@@ -364,5 +384,27 @@ public class ConnectionActivity extends BaseActivity {
         Intent intent = new Intent(activity, ConnectionActivity.class);
         intent.putExtra(ConnectionActivity.ExtraRconServer, rconServer);
         activity.startActivity(intent);
+    }
+
+    public boolean isAllowRunCommand() {
+        return allowRunCommand;
+    }
+
+    public void setAllowRunCommand(boolean allowRunCommand) {
+        this.allowRunCommand = allowRunCommand;
+        connectionCommandRun.setEnabled(allowRunCommand);
+    }
+
+    public List<QuickCommand> getQuickCommands() {
+        if(quickCommands == null) {
+            QuickCommandModel quickCommandModel = new QuickCommandModel(this);
+            quickCommands = quickCommandModel.getAllAsList();
+            quickCommandNames = new String[quickCommands.size()];
+
+            for (int i = 0; i < quickCommands.size(); i++)
+                quickCommandNames[i] = quickCommands.get(i).getName();
+        }
+
+        return quickCommands;
     }
 }

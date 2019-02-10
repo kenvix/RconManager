@@ -18,7 +18,7 @@ public class ServerModel extends BaseModel {
         super(context);
     }
 
-    public Cursor getAll() {
+    public Cursor getAllAsCursor() {
         return select(null, null);
     }
 

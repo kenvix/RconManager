@@ -64,8 +64,8 @@
                         android:id="@+id/quick_command_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="@string/prompt_name"
-                        android:hint="@string/prompt_name"
+                        android:autofillHints="@string/quick_command_name"
+                        android:hint="@string/quick_command_name"
                         android:inputType="text"
                         android:maxLines="1"
                         android:singleLine="true" />
