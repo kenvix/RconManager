@@ -82,4 +82,7 @@
     <string name="title_add_quick_command">Add or modify quick command</string>
     <string name="title_quick_command">Quick commands</string>
     <string name="quick_command_value">Command value</string>
+    <string name="prompt_confirm_disconnect">Disconnect and exit or run in background?</string>
+    <string name="action_disconnect">Disconnect and exit</string>
+    <string name="action_run_in_background">"Background "</string>
 </resources>

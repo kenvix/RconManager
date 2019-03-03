@@ -65,17 +65,17 @@ public class FormPreprocessor extends BasePreprocessor {
                             .beginControlFlow("try")
                             .addStatement("int number = Integer.parseInt($N.getText().toString())", fieldVarName));
 
-                    String lessConditionStatement = null;
+                        String lessConditionStatement = null;
 
-                    if(formNumberLess != null) {
-                        lessConditionStatement = "number >= " + formNumberLess.value();
-                    } else if(formNumberLessOrEqual != null) {
-                        lessConditionStatement = "number > " + formNumberLessOrEqual.value();
-                    }
+                        if(formNumberLess != null) {
+                            lessConditionStatement = "number >= " + formNumberLess.value();
+                        } else if(formNumberLessOrEqual != null) {
+                            lessConditionStatement = "number > " + formNumberLessOrEqual.value();
+                        }
 
-                    String moreConditionStatement = null;
+                        String moreConditionStatement = null;
 
-                    if(formNumberMore != null) {
+                        if(formNumberMore != null) {
                         moreConditionStatement = "number <= " + formNumberMore.value();
                     } else if(formNumberMoreOrEqual != null) {
                         moreConditionStatement = "number < " + formNumberMoreOrEqual.value();

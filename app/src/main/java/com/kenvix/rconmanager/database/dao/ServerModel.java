@@ -7,7 +7,7 @@ import android.database.SQLException;
 
 import com.kenvix.rconmanager.rcon.meta.RconServer;
 
-public class ServerModel extends BaseModel {
+public final class ServerModel extends BaseModel {
     public static final String FieldSid  = "sid";
     public static final String FieldName = "name";
     public static final String FieldHost = "host";

@@ -12,7 +12,7 @@ import com.kenvix.rconmanager.meta.QuickCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuickCommandModel extends BaseModel {
+public final class QuickCommandModel extends BaseModel {
     public static final String FieldCid   = "cid";
     public static final String FieldName  = "name";
     public static final String FieldValue = "value";

@@ -88,4 +88,7 @@
     <string name="action_close">关闭</string>
     <string name="title_add_quick_command">添加或修改快捷命令</string>
     <string name="title_quick_command">快捷命令列表</string>
+    <string name="prompt_confirm_disconnect">退出并结束会话 / 在后台运行?</string>
+    <string name="action_disconnect">退出并结束会话</string>
+    <string name="action_run_in_background">后台运行</string>
 </resources>

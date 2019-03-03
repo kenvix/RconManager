@@ -179,7 +179,6 @@ public class MainActivity extends BaseActivity {
 
     public static void startActivity(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 }

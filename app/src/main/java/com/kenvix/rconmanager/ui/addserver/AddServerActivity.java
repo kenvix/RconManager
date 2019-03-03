@@ -1,6 +1,7 @@
 package com.kenvix.rconmanager.ui.addserver;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.Toolbar;
@@ -70,9 +71,9 @@ public class AddServerActivity extends BaseActivity {
             addServerEditMode.setVisibility(View.VISIBLE);
             addServerEditModeTargetId.setText("#" + String.valueOf(editTargetId));
 
-            try(Cursor currentData = serverModel.getBySid(editTargetId)) {
+            try (Cursor currentData = serverModel.getBySid(editTargetId)) {
 
-                if(currentData.getCount() <= 0)
+                if (currentData.getCount() <= 0)
                     throw new IllegalArgumentException(getString(R.string.error_invalid_sid) + editTargetId);
 
                 addServerPort.setText(currentData.getString(currentData.getColumnIndexOrThrow(ServerModel.FieldPort)));
@@ -110,14 +111,14 @@ public class AddServerActivity extends BaseActivity {
     }
 
     private void onServerFormTest(View view) {
-        if(!checkForm())
+        if (!checkForm())
             return;
 
 
     }
 
     private void onServerFormSubmit(View view) {
-        if(!checkForm())
+        if (!checkForm())
             return;
 
         try {

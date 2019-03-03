@@ -407,4 +407,23 @@ public class ConnectionActivity extends BaseActivity {
 
         return quickCommands;
     }
+
+    public void makeBackConfirm() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.prompt_confirm_disconnect))
+                .setNegativeButton(getString(R.string.action_exit), (dialog, which) -> exit())
+                .setOnCancelListener(dialog -> exit())
+                .setPositiveButton(getString(R.string.action_run_in_background), (dialog, which) -> MainActivity.startActivity(this));
+
+        builder.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            makeBackConfirm();
+        }
+        return false;
+    }
 }
