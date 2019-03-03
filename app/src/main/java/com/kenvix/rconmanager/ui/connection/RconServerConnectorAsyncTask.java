@@ -68,6 +68,7 @@ class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect
                 detail = getException().toString();
             }
 
+            activity.raiseErrorFlag();
             activity.alertDialog(activity.getString(R.string.prompt_connection_failed, activity.getRconServer().getHostAndPort(), detail), result -> exitForError());
         }
 

@@ -55,6 +55,8 @@ public class ConnectionActivity extends BaseActivity {
     private List<QuickCommand> quickCommands = null;
     private String[] quickCommandNames = null;
 
+    private boolean errorRaised = false;
+
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
     @ViewAutoLoad public Button connectionCommandRun;
@@ -133,7 +135,7 @@ public class ConnectionActivity extends BaseActivity {
 
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
-            //setResult(RESULT_CANCELED);
+            raiseErrorFlag();
             finish();
         }
     }
@@ -155,7 +157,7 @@ public class ConnectionActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
 
-        if(rconConnect != null) {
+        if(rconConnect != null && !errorRaised) {
             int notifyCode = makeConnectionNotification();
             Log.d("Rcon Connection", "Frontend paused, hashcode: " + notifyCode);
         }
@@ -165,11 +167,16 @@ public class ConnectionActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        if(rconConnect != null) {
+        if(rconConnect != null && !errorRaised) {
             int notifyCode = rconServer.hashCode();
             Log.d("Rcon Connection", "Frontend started, hashcode: " + notifyCode);
             cleanConnectionNotification(notifyCode);
         }
+    }
+
+    public void raiseErrorFlag() {
+        this.errorRaised = true;
+        setResult(RESULT_CANCELED);
     }
 
 
