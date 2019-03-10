@@ -71,7 +71,7 @@
     <string name="prompt_connection_info">名称: %s\n主机: %s\n端口: %d</string>
     <string name="title_connection_info">连接信息</string>
 
-    <string name="app_version" translatable="false">Ver.1.0-PRERELEASE</string>
+    <string name="app_version" translatable="false">Ver.1.0</string>
     <string name="navigation_drawer_open">打开菜单栏</string>
     <string name="navigation_drawer_close">关闭菜单栏</string>
     <string name="nav_header_desc">导航栏头部</string>
