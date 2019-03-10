@@ -2,6 +2,7 @@ package com.kenvix.utils.preprocessor;
 
 import com.kenvix.utils.Environment;
 import com.kenvix.utils.StringTools;
+import com.kenvix.utils.annotation.ErrorPrompt;
 import com.kenvix.utils.annotation.form.*;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -90,7 +91,7 @@ public class FormPreprocessor extends BasePreprocessor {
 
                     builders.forEach(builder -> builder
                             .beginControlFlow("if ($L)", conditionStatement)
-                            .addStatement("$N.setError($S) ", fieldVarName, "You can't let " + conditionStatement.replace("||", "or"))
+                            .addStatement("$N.setError($S) ", fieldVarName, getErrorPromptStatement(annotatedElement, "You can't let " + conditionStatement.replace("||", "or")))
                             .addStatement("return false")
                             .endControlFlow()
                             .endControlFlow()

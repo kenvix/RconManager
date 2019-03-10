@@ -1,6 +1,8 @@
 package com.kenvix.utils.preprocessor;
 
 import com.kenvix.utils.Environment;
+import com.kenvix.utils.StringTools;
+import com.kenvix.utils.annotation.ErrorPrompt;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -158,6 +160,16 @@ public abstract class BasePreprocessor extends AbstractProcessor {
         return JavaFile.builder(Environment.TargetAppPackage + ".generated", className)
                 .addFileComment(getFileHeader());
     }
+
+    protected final String getErrorPromptStatement(Element annotatedElement, String defaultValue) {
+        ErrorPrompt errorPrompt = annotatedElement.getAnnotation(ErrorPrompt.class);
+
+        if (errorPrompt == null)
+            return defaultValue;
+        else
+            return errorPrompt.value();
+    }
+
 
     /**
      *

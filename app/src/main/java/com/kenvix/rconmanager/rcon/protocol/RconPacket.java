@@ -2,8 +2,15 @@ package com.kenvix.rconmanager.rcon.protocol;
 
 final class RconPacket {
 
-    static final int SERVERDATA_EXECCOMMAND = 2;
-    static final int SERVERDATA_AUTH = 3;
+    /**
+     * SERVERDATA_EXECCOMMAND
+     * SERVERDATA_AUTH_RESPONSE
+     */
+    static final int PacketExecCommand = 2;
+    /**
+     * SERVERDATA_AUTH
+     */
+    static final int PacketAuth = 3;
 
     private int requestId;
     private int type;

@@ -60,7 +60,7 @@ public class RconConnect {
             this.requestId = this.hashCode();
             this.socket = new Socket(rconServer.getHost(), rconServer.getPort());
 
-            RconPacket res = send(RconPacket.SERVERDATA_AUTH, rconServer.getPassword().getBytes());
+            RconPacket res = send(RconPacket.PacketAuth, rconServer.getPassword().getBytes());
 
             if(res.getRequestId() == -1) {
                 throw new IllegalAuthorizationException();
@@ -119,11 +119,9 @@ public class RconConnect {
             buffer.putInt(type);
             buffer.put(payload);
 
-            // Null bytes terminators
             buffer.put((byte)0);
             buffer.put((byte)0);
 
-            // Woosh!
             out.write(buffer.array());
             out.flush();
         } catch (IOException ex) {
@@ -212,7 +210,7 @@ public class RconConnect {
             }
 
             setStatus(Status.Working);
-            RconPacket response = send(RconPacket.SERVERDATA_EXECCOMMAND, payload.getBytes());
+            RconPacket response = send(RconPacket.PacketExecCommand, payload.getBytes());
             setStatus(Status.Connected);
 
             RconCommandResult result = new RconCommandResult(payload, new String(response.getPayload(), charset));

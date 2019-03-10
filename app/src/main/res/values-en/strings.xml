@@ -73,7 +73,7 @@
     <string name="nav_server_list">Server List</string>
     <string name="nav_settings">Settings</string>
     <string name="title_application">Application and Preference</string>
-    <string name="quick_command_name">快捷命令名称</string>
+    <string name="quick_command_name">Quick command name</string>
     <string name="action_save">Save</string>
     <string name="prompt_value">Value</string>
     <string name="text_quick_command_edit_mode">"Editor mode / Editing quick command "</string>
@@ -85,4 +85,9 @@
     <string name="prompt_confirm_disconnect">Disconnect and exit or run in background?</string>
     <string name="action_disconnect">Disconnect and exit</string>
     <string name="action_run_in_background">"Background "</string>
+    <string name="error_invalid_port">Illegal port number</string>
+    <string name="title_view_github">View github repo</string>
+    <string name="summary_license">OpenSource License: GPLv3</string>
+    <string name="title_author">Author: Kenvix</string>
+    <string name="summary_author_blog">View author\'s blog (kenvix.com)</string>
 </resources>

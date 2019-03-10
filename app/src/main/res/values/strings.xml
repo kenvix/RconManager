@@ -71,7 +71,7 @@
     <string name="prompt_connection_info">名称: %s\n主机: %s\n端口: %d</string>
     <string name="title_connection_info">连接信息</string>
 
-    <string name="nav_header_subtitle" translatable="false">Ver.1.0-PRERELEASE by Kenvix</string>
+    <string name="app_version" translatable="false">Ver.1.0-PRERELEASE</string>
     <string name="navigation_drawer_open">打开菜单栏</string>
     <string name="navigation_drawer_close">关闭菜单栏</string>
     <string name="nav_header_desc">导航栏头部</string>
@@ -91,4 +91,9 @@
     <string name="prompt_confirm_disconnect">退出并结束会话 / 在后台运行?</string>
     <string name="action_disconnect">退出并结束会话</string>
     <string name="action_run_in_background">后台运行</string>
+    <string name="error_invalid_port">端口号非法</string>
+    <string name="title_view_github">查看 Github 项目主页</string>
+    <string name="summary_license">开源协议：GPLv3</string>
+    <string name="title_author">作者：Kenvix</string>
+    <string name="summary_author_blog">查看作者博客 (kenvix.com)</string>
 </resources>

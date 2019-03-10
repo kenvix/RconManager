@@ -135,16 +135,6 @@ tools:context=".ui.main.MainActivity">
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/add_server_test"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_test_server"
-                    android:textStyle="bold" />
-
-                <Button
                     android:id="@+id/add_server_submit"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"

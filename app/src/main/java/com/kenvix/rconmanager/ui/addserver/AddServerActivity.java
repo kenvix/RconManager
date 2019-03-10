@@ -16,6 +16,7 @@ import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.ui.main.MainActivity;
 import com.kenvix.rconmanager.utils.Invoker;
+import com.kenvix.utils.annotation.ErrorPrompt;
 import com.kenvix.utils.annotation.ViewAutoLoad;
 import com.kenvix.utils.annotation.form.FormNotEmpty;
 import com.kenvix.utils.annotation.form.FormNumberLessOrEqual;
@@ -39,13 +40,12 @@ public class AddServerActivity extends BaseActivity {
     @FormNotEmpty
     @FormNumberLessOrEqual(65535)
     @FormNumberMoreOrEqual(1)
+    @ErrorPrompt("Invalid port number")
     public EditText addServerPort;
     @ViewAutoLoad
     public EditText addServerPassword;
     @ViewAutoLoad
     public Button addServerSubmit;
-    @ViewAutoLoad
-    public Button addServerTest;
     @ViewAutoLoad
     public Toolbar addServerToolbar;
     @ViewAutoLoad
@@ -63,7 +63,6 @@ public class AddServerActivity extends BaseActivity {
         addServerToolbar.setNavigationOnClickListener(view -> finish());
 
         addServerSubmit.setOnClickListener(this::onServerFormSubmit);
-        addServerTest.setOnClickListener(this::onServerFormTest);
 
         serverModel = new ServerModel(this);
 
@@ -108,13 +107,6 @@ public class AddServerActivity extends BaseActivity {
 
     private boolean checkForm() {
         return Invoker.invokeFormChecker(this);
-    }
-
-    private void onServerFormTest(View view) {
-        if (!checkForm())
-            return;
-
-
     }
 
     private void onServerFormSubmit(View view) {

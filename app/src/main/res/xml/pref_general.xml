@@ -22,4 +22,23 @@
             android:defaultValue="true"/>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_about">
+
+        <Preference
+            android:key="app_name"
+            android:title="@string/app_name"
+            android:summary="@string/app_version" />
+
+        <Preference
+            android:key="view_github"
+            android:title="@string/title_view_github"
+            android:summary="@string/summary_license" />
+
+        <Preference
+            android:key="author"
+            android:title="@string/title_author"
+            android:summary="@string/summary_author_blog" />
+    </PreferenceCategory>
 </PreferenceScreen>
