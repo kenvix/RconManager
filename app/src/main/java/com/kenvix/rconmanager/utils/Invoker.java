@@ -20,6 +20,7 @@ public final class Invoker {
 
     static {
         try {
+            assert classLoader != null;
             formChecker = classLoader.loadClass("com.kenvix.rconmanager.generated.FormChecker");
             viewToolset = classLoader.loadClass("com.kenvix.rconmanager.generated.ViewToolset");
         } catch (ClassNotFoundException ex) {
